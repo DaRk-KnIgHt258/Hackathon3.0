@@ -1,47 +1,42 @@
 import React from 'react';
 import AppIcon from '../common/AppIcon';
 
+const FOOTER_LINKS = [
+  { key: 'bar-council',       label: 'Bar Council Standards' },
+  { key: 'api-gateway',       label: 'Registry API Gateway' },
+  { key: 'digiseal',          label: 'DigiSeal Compliance' },
+  { key: 'registry-settings', label: 'Court Registry Settings' },
+];
+
 export function InstitutionalFooter({ onOpenInstitutional }) {
   return (
-    <footer className="bg-primary text-white border-t border-slate-800 mt-auto py-5 px-4 sm:px-6">
-      <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-label text-slate-400">
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2 text-white font-bold font-headline">
-            <AppIcon name="balance" className="w-4 h-4 text-secondary" />
-            LexoraDocs Jurisprudence Intelligence
+    <footer className="bg-primary border-t border-white/8 mt-auto">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+
+        {/* Brand */}
+        <div className="flex items-center gap-2.5">
+          <AppIcon name="balance" className="w-4 h-4 text-secondary shrink-0" />
+          <div>
+            <span className="block text-xs font-headline font-bold text-white">NyayaSutra Jurisprudence Intelligence</span>
+            <span className="block text-[10px] text-slate-500">
+              Certified under Supreme Court CIS 3.2 Electronic Case Management Guidelines
+            </span>
           </div>
-          <span className="text-slate-600 hidden sm:inline">|</span>
-          <span className="text-center sm:text-left">
-            Certified under Supreme Court Electronic Case Management Guidelines (CIS 3.2)
-          </span>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-5">
-          <button
-            onClick={() => onOpenInstitutional && onOpenInstitutional('bar-council')}
-            className="hover:text-secondary transition cursor-pointer"
-          >
-            Bar Council Security Standards
-          </button>
-          <button
-            onClick={() => onOpenInstitutional && onOpenInstitutional('api-gateway')}
-            className="hover:text-secondary transition cursor-pointer"
-          >
-            Registry API Gateway
-          </button>
-          <button
-            onClick={() => onOpenInstitutional && onOpenInstitutional('digiseal')}
-            className="hover:text-secondary transition cursor-pointer"
-          >
-            DigiSeal Compliance
-          </button>
-          <button
-            onClick={() => onOpenInstitutional && onOpenInstitutional('registry-settings')}
-            className="hover:text-secondary transition cursor-pointer"
-          >
-            Court Registry Settings
-          </button>
-          <span className="text-slate-400 font-mono text-[11px] bg-slate-900/60 px-2 py-0.5 rounded border border-slate-700/60 flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+
+        {/* Links + status */}
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          {FOOTER_LINKS.map((link) => (
+            <button
+              key={link.key}
+              onClick={() => onOpenInstitutional?.(link.key)}
+              className="text-[11px] text-slate-500 hover:text-secondary transition-colors cursor-pointer font-label"
+            >
+              {link.label}
+            </button>
+          ))}
+          <span className="inline-flex items-center gap-1.5 text-[10px] text-slate-500 font-mono bg-white/5 border border-white/10 px-2 py-1 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             All 25 High Courts Operational
           </span>
         </div>
