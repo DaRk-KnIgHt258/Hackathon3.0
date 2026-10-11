@@ -4,65 +4,39 @@
 
 @layer base {
   body {
-    @apply bg-[#070B14] text-slate-100 font-sans antialiased min-h-screen selection:bg-emerald-500/30 selection:text-white;
+    @apply bg-[#F8FAFC] text-on-surface font-body antialiased min-h-screen selection:bg-secondary/30 selection:text-primary;
   }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.material-symbols-outlined.fill-icon {
+  font-variation-settings: 'FILL' 1;
 }
 
 /* Custom scrollbar */
+.custom-scroll::-webkit-scrollbar,
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
-::-webkit-scrollbar-track {
-  background: rgba(11, 15, 25, 0.6);
-}
+.custom-scroll::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.6);
-  border-radius: 9999px;
+  background: #CBD5E1;
+  border-radius: 4px;
 }
+.custom-scroll::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(16, 185, 129, 0.6);
+  background: #94A3B8;
 }
 
-.glass-panel {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-/* Print formatting for legal briefs and court dockets */
-@media print {
-  header,
-  footer,
-  button,
-  .no-print {
-    display: none !important;
-  }
-  body {
-    background: #ffffff !important;
-    color: #111827 !important;
-  }
-  * {
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-  main,
-  article,
-  section,
-  div {
-    background-color: transparent !important;
-    border-color: #e2e8f0 !important;
-  }
-  h1,
-  h2,
-  h3,
-  h4,
-  p,
-  span,
-  strong,
-  em {
-    color: #0f172a !important;
-  }
+.custom-scroll::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
