@@ -231,3 +231,9 @@ frontend/.env
 venv/
 ENV/
 env/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+backend/nyayasutra.db

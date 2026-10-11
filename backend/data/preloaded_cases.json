@@ -1,0 +1,186 @@
+{
+  "_README": "Place pre-parsed CaseDossier JSON objects here, keyed by case_id. These are loaded on startup for zero-latency demo. If this file is missing or a key is absent, stub dossiers are used instead.",
+  "sample_arnesh_kumar": {
+    "title": "Arnesh Kumar vs. State of Bihar & Anr.",
+    "case_number": "Criminal Appeal No. 1277 of 2014",
+    "court": "Supreme Court of India",
+    "judgment_date": "2 July 2014",
+    "coram": ["Justice C.K. Prasad", "Justice Pinaki Chandra Ghose"],
+    "petitioner": "Arnesh Kumar",
+    "respondent": "State of Bihar & Anr.",
+    "case_type": "CRIMINAL",
+    "disposition_status": "ALLOWED",
+    "verdict_summary": "Appeal allowed. SC issued mandatory guidelines: magistrates must apply mind before authorising detention; police must record reasons before arrest under S.41 CrPC.",
+    "statutes_cited": [
+      {
+        "act": "Indian Penal Code, 1860",
+        "section": "Section 498-A",
+        "description": "Cruelty to a woman by her husband or his relatives.",
+        "context_in_case": "Appellant was arrested under S.498A IPC on wife's complaint; SC examined whether arrest was justified."
+      },
+      {
+        "act": "Code of Criminal Procedure, 1973",
+        "section": "Section 41",
+        "description": "When police may arrest without warrant – must record reasons in writing.",
+        "context_in_case": "SC held that S.41(1)(b)(ii) checklist must be satisfied before arrest; police officer must record reasons."
+      },
+      {
+        "act": "Code of Criminal Procedure, 1973",
+        "section": "Section 41A",
+        "description": "Notice of appearance before police officer – alternative to arrest.",
+        "context_in_case": "SC directed use of S.41A notice in lieu of arrest wherever arrest is not required by S.41."
+      },
+      {
+        "act": "Code of Criminal Procedure, 1973",
+        "section": "Section 167",
+        "description": "Procedure when investigation cannot be completed in 24 hours.",
+        "context_in_case": "Magistrate cannot mechanically authorise custody under S.167 without scrutinising S.41 grounds."
+      }
+    ],
+    "precedents_cited": [
+      "Joginder Kumar vs. State of U.P. (1994) 4 SCC 260",
+      "D.K. Basu vs. State of West Bengal (1997) 1 SCC 416",
+      "Lalita Kumari vs. Govt. of U.P. (2014) 2 SCC 1"
+    ],
+    "lawyer_headnote": "RATIO DECIDENDI – The power to arrest is not a duty to arrest. S.41 CrPC imposes a checklist that a police officer must satisfy and record in writing before arresting a person in a cognisable offence carrying up to 7 years imprisonment. A Magistrate authorising detention under S.167 must independently satisfy himself of the S.41 compliance. Violation entitles the arrested person to claim compensation for violation of Article 21. SC issued nine mandatory directions to all State Governments and Police Authorities.",
+    "citizen_summary_en": "The Supreme Court ruled that police cannot arrest someone just because a complaint is filed under Section 498A (domestic cruelty). Before arresting, the officer must tick a specific checklist and write down the reasons. A judge who orders someone to stay in jail must also check those reasons independently. If these rules are broken, the arrested person can get compensation from the government.",
+    "citizen_summary_hi": "सुप्रीम कोर्ट ने फैसला दिया कि पुलिस केवल शिकायत दर्ज होने पर किसी को गिरफ्तार नहीं कर सकती। गिरफ्तारी से पहले अधिकारी को लिखित कारण बताने होंगे और एक निर्धारित सूची को पूरा करना होगा। मजिस्ट्रेट को भी जेल भेजने का आदेश देने से पहले इन कारणों की जाँच करनी होगी। नियम तोड़ने पर गिरफ्तार व्यक्ति मुआवज़े का हकदार है।"
+  },
+  "sample_dashrath_rupsingh": {
+    "title": "Dashrath Rupsingh Rathod vs. State of Maharashtra & Anr.",
+    "case_number": "Criminal Appeal No. 2287 of 2009",
+    "court": "Supreme Court of India",
+    "judgment_date": "1 August 2014",
+    "coram": ["Justice T.S. Thakur", "Justice Vikramajit Sen", "Justice C. Nagappan"],
+    "petitioner": "Dashrath Rupsingh Rathod",
+    "respondent": "State of Maharashtra & Anr.",
+    "case_type": "COMMERCIAL",
+    "disposition_status": "ALLOWED",
+    "verdict_summary": "Three-judge bench overruled Bhaskaran case; territorial jurisdiction under S.138 NI Act lies ONLY at the court where the drawee bank (paying bank) is located.",
+    "statutes_cited": [
+      {
+        "act": "Negotiable Instruments Act, 1881",
+        "section": "Section 138",
+        "description": "Dishonour of cheque for insufficiency of funds – criminal offence.",
+        "context_in_case": "Primary section under which the cheque-bounce complaint was filed."
+      },
+      {
+        "act": "Negotiable Instruments Act, 1881",
+        "section": "Section 142",
+        "description": "Cognisance of offences under S.138 and territorial jurisdiction.",
+        "context_in_case": "SC re-interpreted S.142(2) to hold that only the court where the cheque was presented for payment has jurisdiction."
+      },
+      {
+        "act": "Code of Criminal Procedure, 1973",
+        "section": "Section 177",
+        "description": "Ordinary place of inquiry and trial – where offence was committed.",
+        "context_in_case": "Applied to determine the locus of the S.138 offence – the bank where payment was demanded and refused."
+      }
+    ],
+    "precedents_cited": [
+      "K. Bhaskaran vs. Sankaran Vaidhyan Balan (1999) 7 SCC 510 (overruled)",
+      "Harman Electronics (P) Ltd vs. National Panasonic India (P) Ltd (2009) 1 SCC 720"
+    ],
+    "lawyer_headnote": "RATIO DECIDENDI – The SC (3-judge bench) overruled K. Bhaskaran and held that the 'cause of action' under S.138 NI Act crystallises only at the place where the drawee bank returns the cheque unpaid. Therefore, exclusive territorial jurisdiction vests in the court within whose jurisdiction the bank on which the cheque is drawn (drawee bank) is situated. Cases pending elsewhere must be returned to the competent court.",
+    "citizen_summary_en": "If someone gives you a cheque that bounces, you can only file a court case in the city where the cheque was supposed to be paid (i.e., where the drawer's bank is located). You cannot file a case in your home city just because you deposited the cheque there. The Supreme Court changed an older rule that allowed multiple cities to handle such cases.",
+    "citizen_summary_hi": "अगर किसी ने आपको चेक दिया और वह बाउंस हो गया, तो आप केवल उस शहर की अदालत में मुकदमा दर्ज कर सकते हैं जहाँ चेक देने वाले का बैंक खाता है। अपने शहर में इसलिए नहीं जा सकते कि आपने वहाँ चेक जमा किया था। सुप्रीम कोर्ट ने पुराने नियम को बदलकर यह स्पष्ट किया।"
+  },
+  "sample_puttaswamy": {
+    "title": "Justice K.S. Puttaswamy (Retd.) vs. Union of India",
+    "case_number": "Writ Petition (Civil) No. 494 of 2012",
+    "court": "Supreme Court of India",
+    "judgment_date": "24 August 2017",
+    "coram": [
+      "Chief Justice J.S. Khehar",
+      "Justice J. Chelameswar",
+      "Justice S.A. Bobde",
+      "Justice R.K. Agrawal",
+      "Justice R.F. Nariman",
+      "Justice A.M. Sapre",
+      "Justice D.Y. Chandrachud",
+      "Justice S.K. Kaul",
+      "Justice S. Abdul Nazeer"
+    ],
+    "petitioner": "Justice K.S. Puttaswamy (Retd.) & Ors.",
+    "respondent": "Union of India & Ors.",
+    "case_type": "CONSTITUTIONAL",
+    "disposition_status": "ALLOWED",
+    "verdict_summary": "9-judge Constitution Bench unanimously held that the Right to Privacy is a fundamental right intrinsic to Articles 14, 19 and 21 of the Constitution of India. M.P. Sharma and Kharak Singh (to the extent they held otherwise) are overruled.",
+    "statutes_cited": [
+      {
+        "act": "Constitution of India",
+        "section": "Article 21",
+        "description": "Right to Life and Personal Liberty – no person shall be deprived thereof except by procedure established by law.",
+        "context_in_case": "Privacy recognised as an inseparable facet of Art.21; Bench applied progressive interpretation."
+      },
+      {
+        "act": "Constitution of India",
+        "section": "Article 14",
+        "description": "Right to Equality before law.",
+        "context_in_case": "Privacy violations must satisfy equality and proportionality requirements under Art.14."
+      },
+      {
+        "act": "Constitution of India",
+        "section": "Article 19",
+        "description": "Right to Freedom of Speech, Expression, Movement, etc.",
+        "context_in_case": "Privacy is an inherent aspect of all fundamental freedoms under Art.19."
+      }
+    ],
+    "precedents_cited": [
+      "M.P. Sharma vs. Satish Chandra (1954) SCR 1077 (overruled in part)",
+      "Kharak Singh vs. State of U.P. (1964) 1 SCR 332 (overruled in part)",
+      "Maneka Gandhi vs. Union of India (1978) 1 SCC 248",
+      "Gobind vs. State of Madhya Pradesh (1975) 2 SCC 148",
+      "R. Rajagopal vs. State of Tamil Nadu (1994) 6 SCC 632"
+    ],
+    "lawyer_headnote": "RATIO DECIDENDI – Privacy is not merely a common-law right but a constitutionally guaranteed fundamental right inhering in Articles 14, 19 and 21. It encompasses decisional autonomy (liberty of thought, belief, expression, identity) and informational privacy. Any State encroachment must satisfy: (1) legality – backed by law; (2) legitimate aim; (3) proportionality; (4) procedural guarantees. The two earlier 8-judge and 6-judge benches that held otherwise are expressly overruled.",
+    "citizen_summary_en": "India's Supreme Court ruled that privacy is a basic right protected by the Constitution – just like the right to life or freedom of speech. This means the government cannot collect, share, or misuse your personal information without a good reason, a proper law, and fair procedures. This ruling sets the foundation for India's data protection framework.",
+    "citizen_summary_hi": "सुप्रीम कोर्ट की 9 जजों की पीठ ने एकमत से कहा कि निजता (Privacy) भारत के संविधान में दिया गया मूल अधिकार है। सरकार बिना उचित कारण, बिना कानून और बिना उचित प्रक्रिया के आपकी व्यक्तिगत जानकारी नहीं ले सकती। यह फैसला भारत के डेटा संरक्षण कानून की नींव बना।"
+  },
+  "sample_balco": {
+    "title": "Bharat Aluminium Co. (BALCO) vs. Kaiser Aluminium & Chemical Corp.",
+    "case_number": "Civil Appeal No. 7019 of 2005",
+    "court": "Supreme Court of India",
+    "judgment_date": "6 September 2012",
+    "coram": [
+      "Justice S.H. Kapadia (CJI)",
+      "Justice D.K. Jain",
+      "Justice S.S. Nijjar",
+      "Justice Ranjana Prakash Desai",
+      "Justice J.S. Khehar"
+    ],
+    "petitioner": "Bharat Aluminium Co. (BALCO) & Ors.",
+    "respondent": "Kaiser Aluminium & Chemical Corp. & Ors.",
+    "case_type": "COMMERCIAL",
+    "disposition_status": "DISMISSED",
+    "verdict_summary": "5-judge Constitution Bench overruled Bhatia International; Part I of the Arbitration & Conciliation Act 1996 applies only to arbitrations seated in India. Indian courts have NO jurisdiction to supervise or intervene in foreign-seated arbitrations.",
+    "statutes_cited": [
+      {
+        "act": "Arbitration and Conciliation Act, 1996",
+        "section": "Part I (Sections 1–43)",
+        "description": "Domestic arbitration provisions applicable to India-seated arbitrations.",
+        "context_in_case": "SC held Part I applies exclusively to arbitrations where the seat is in India."
+      },
+      {
+        "act": "Arbitration and Conciliation Act, 1996",
+        "section": "Part II (Sections 44–60)",
+        "description": "Enforcement of foreign awards under New York and Geneva Conventions.",
+        "context_in_case": "Governs enforcement of foreign-seated arbitration awards in India."
+      },
+      {
+        "act": "Arbitration and Conciliation Act, 1996",
+        "section": "Section 2(2)",
+        "description": "Territorial scope of Part I.",
+        "context_in_case": "Key provision interpreted by SC to limit Part I to India-seated arbitrations."
+      }
+    ],
+    "precedents_cited": [
+      "Bhatia International vs. Bulk Trading S.A. (2002) 4 SCC 105 (overruled)",
+      "Venture Global Engineering vs. Satyam Computer Services (2008) 4 SCC 190 (overruled)",
+      "Videocon Industries Ltd vs. Union of India (2011) 6 SCC 161"
+    ],
+    "lawyer_headnote": "RATIO DECIDENDI – The 5-judge bench overruled Bhatia International and held that Part I of the Arbitration & Conciliation Act, 1996 has no application to arbitrations seated outside India. Indian courts cannot entertain applications for interim relief (S.9), appointment of arbitrators (S.11), or setting aside awards (S.34) in respect of foreign-seated arbitrations. The judgment applies prospectively – existing agreements may rely on Bhatia until that agreement is renewed or superseded.",
+    "citizen_summary_en": "If two companies agree to settle disputes through arbitration in another country (e.g., London or Singapore), Indian courts cannot interfere in that process. India's arbitration law only covers disputes decided inside India. This ruling made India more business-friendly and aligned its arbitration law with global standards.",
+    "citizen_summary_hi": "अगर दो कंपनियाँ विदेश में (जैसे लंदन या सिंगापुर में) मध्यस्थता से विवाद सुलझाने का समझौता करती हैं, तो भारतीय अदालतें उसमें दखल नहीं दे सकतीं। भारत का मध्यस्थता कानून केवल भारत में होने वाली मध्यस्थता पर लागू होता है। इस फैसले ने भारत को अंतरराष्ट्रीय व्यापार के लिए अधिक अनुकूल बनाया।"
+  }
+}
