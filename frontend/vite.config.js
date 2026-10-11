@@ -5,11 +5,17 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: '0.0.0.0',
+    port: 5173,
+    watch: {
+      usePolling: true,
+    },
     proxy: {
       // Forward all /api/* calls to the FastAPI backend during development.
-      // This avoids CORS preflight issues; production should use a reverse proxy (nginx/caddy).
+      // In Docker Compose: VITE_PROXY_BACKEND_URL=http://backend:8000
+      // In local shell: defaults to http://localhost:8000
       '/api': {
-        target: 'http://localhost:8000',
+        target: process.env.VITE_PROXY_BACKEND_URL || 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
       },

@@ -126,10 +126,10 @@ export async function askCase(caseId, question) {
  */
 export async function isBackendAlive() {
   try {
-    const target = BASE_URL || 'http://localhost:8000';
+    const target = BASE_URL || '';
     const res = await fetch(`${target}/api/cases/samples`, {
       method: 'GET',
-      signal: AbortSignal.timeout(2000),
+      signal: AbortSignal.timeout(3000),
     });
     return res.ok;
   } catch (_) {

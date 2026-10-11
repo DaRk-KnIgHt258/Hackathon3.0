@@ -14,13 +14,29 @@ from app.services.sample_loader import seed_sample_cases
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ── Startup ─────────────────────────────────────────────────────────────
-    # Create all tables (safe to call even if they already exist)
-    Base.metadata.create_all(bind=engine)
+    # Retry DB connection up to 10 times to handle container startup lag
+    import time
+    import logging
+    logger = logging.getLogger("uvicorn")
+
+    max_retries = 10
+    for attempt in range(1, max_retries + 1):
+        try:
+            Base.metadata.create_all(bind=engine)
+            break
+        except Exception as e:
+            if attempt == max_retries:
+                logger.error(f"Failed to connect to database after {max_retries} attempts: {e}")
+                raise e
+            logger.warning(f"Database not ready yet (attempt {attempt}/{max_retries}). Retrying in 2s...")
+            time.sleep(2)
 
     # Seed the 4 benchmark cases for zero-latency demo
     db = SessionLocal()
     try:
         seed_sample_cases(db)
+    except Exception as e:
+        logger.warning(f"Warning seeding sample cases: {e}")
     finally:
         db.close()
 
