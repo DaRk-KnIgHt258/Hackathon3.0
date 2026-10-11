@@ -219,7 +219,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Environment & Secrets
+# Environments & Virtual Envs
 .env
 .env*.local
 backend/.env
@@ -227,3 +227,7 @@ frontend/.env
 *.env
 !.env.example
 !backend/.env.example
+.venv/
+venv/
+ENV/
+env/
