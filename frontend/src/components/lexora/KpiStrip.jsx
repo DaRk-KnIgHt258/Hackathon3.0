@@ -1,130 +1,100 @@
 import React from 'react';
 import { AppIcon } from '../common/AppIcon';
 
+const KPI_DATA = [
+  {
+    key: 'all',
+    label: 'Active Dockets',
+    icon: 'account_balance',
+    iconBg: 'bg-primary/8',
+    iconColor: 'text-primary',
+    badge: { text: '+14 this week', bg: 'bg-emerald-50', text2: 'text-emerald-700', border: 'border-emerald-200' },
+    footer: { icon: 'calendar_today', text: '3 Listed Today', sub: '98.4% On-Track', iconColor: 'text-secondary' },
+    accentBar: 'bg-primary',
+  },
+  {
+    key: 'certified',
+    label: 'Certified Copies',
+    value: '842',
+    icon: 'verified',
+    iconBg: 'bg-secondary/15',
+    iconColor: 'text-secondary',
+    badge: { text: 'DigiSeal Attested', bg: 'bg-secondary-container', text2: 'text-on-secondary-container', border: 'border-secondary/30' },
+    footer: { icon: 'workspace_premium', text: 'Gold Seal Ready', sub: '12 Pending Seal', iconColor: 'text-secondary' },
+    accentBar: 'bg-secondary',
+  },
+  {
+    key: 'notices',
+    label: 'Limitation Watch',
+    value: '29',
+    icon: 'timer',
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-700',
+    badge: { text: '4 Expiring <48h', bg: 'bg-amber-50', text2: 'text-amber-800', border: 'border-amber-300' },
+    footer: { icon: 'mail', text: 'Postal Ack: 21 Delivered', sub: '8 In-Transit', iconColor: 'text-amber-600' },
+    accentBar: 'bg-amber-500',
+  },
+  {
+    key: 'vault',
+    label: 'Archived Files',
+    value: '3,410',
+    icon: 'folder_open',
+    iconBg: 'bg-blue-50',
+    iconColor: 'text-blue-700',
+    badge: { text: '3.2 GB Cached', bg: 'bg-blue-50', text2: 'text-blue-800', border: 'border-blue-200' },
+    footer: { icon: 'download', text: 'One-Click Ready', sub: 'SHA-256 Hashed', iconColor: 'text-secondary' },
+    accentBar: 'bg-blue-500',
+  },
+];
+
+const STAGGER = ['stagger-1', 'stagger-2', 'stagger-3', 'stagger-4'];
+
 export function KpiStrip({ totalCases = 1248, onKpiClick }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {/* Card 1: Active Tracked Dockets */}
-      <div
-        onClick={() => onKpiClick && onKpiClick('all')}
-        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-        title="View All Active Matters"
-      >
-        <div className="absolute -right-3 -top-3 w-16 h-16 bg-primary/5 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
-        <div>
-          <div className="flex items-center justify-between text-xs mb-2">
-            <span className="font-label font-semibold text-on-surface-variant uppercase tracking-wider text-[11px]">
-              Docket Intelligence
-            </span>
-            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <AppIcon name="trending_up" className="w-3.5 h-3.5 text-emerald-700" /> +14 this wk
-            </span>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <h2 className="font-headline text-2xl font-bold text-primary tracking-tight">
-              {totalCases.toLocaleString()}
-            </h2>
-            <span className="text-xs text-on-surface-variant font-medium">Active Matters</span>
-          </div>
-        </div>
-        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1.5 text-primary font-medium">
-            <AppIcon name="calendar" className="w-4 h-4 text-secondary" />
-            <strong>3 Listed Today</strong> (Bench 4 & 9)
-          </span>
-          <span className="text-[11px] text-slate-400">98.4% On-Track</span>
-        </div>
-      </div>
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {KPI_DATA.map((kpi, i) => (
+        <button
+          key={kpi.key}
+          onClick={() => onKpiClick?.(kpi.key)}
+          className={`bg-white text-left rounded-xl border border-outline-variant shadow-2xs p-4
+                      card-hover hover:border-secondary/40 relative overflow-hidden group
+                      animate-fade-up ${STAGGER[i]} focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary/50`}
+          title={`View ${kpi.label}`}
+        >
+          {/* Accent bar top */}
+          <div className={`absolute top-0 left-0 right-0 h-0.5 ${kpi.accentBar} opacity-60 group-hover:opacity-100 transition-opacity`} />
 
-      {/* Card 2: Certified Judgments */}
-      <div
-        onClick={() => onKpiClick && onKpiClick('certified')}
-        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-        title="Filter Certified Copies"
-      >
-        <div className="absolute -right-3 -top-3 w-16 h-16 bg-secondary/10 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
-        <div>
-          <div className="flex items-center justify-between text-xs mb-2">
-            <span className="font-label font-semibold text-on-surface-variant uppercase tracking-wider text-[11px]">
-              Decrees & Rulings
-            </span>
-            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-secondary-container text-on-secondary-container border border-secondary/30">
-              <AppIcon name="verified" className="w-3.5 h-3.5 text-secondary" /> Watermarked
-            </span>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <h2 className="font-headline text-2xl font-bold text-primary tracking-tight">842</h2>
-            <span className="text-xs text-on-surface-variant font-medium">Certified Copies</span>
-          </div>
-        </div>
-        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1.5 text-primary font-medium">
-            <AppIcon name="award" className="w-4 h-4 text-secondary" />
-            DigiSeal Attested Copies
-          </span>
-          <span className="text-[11px] text-slate-400">12 Pending Seal</span>
-        </div>
-      </div>
+          {/* Background decoration */}
+          <div className="absolute -right-4 -top-4 w-20 h-20 rounded-full bg-current opacity-[0.03] pointer-events-none group-hover:scale-110 transition-transform duration-300" />
 
-      {/* Card 3: Pending Legal Notices */}
-      <div
-        onClick={() => onKpiClick && onKpiClick('notices')}
-        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-        title="View Statutory Limitation Radar"
-      >
-        <div className="absolute -right-3 -top-3 w-16 h-16 bg-amber-500/5 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
-        <div>
-          <div className="flex items-center justify-between text-xs mb-2">
-            <span className="font-label font-semibold text-on-surface-variant uppercase tracking-wider text-[11px]">
-              Statutory Notices
-            </span>
-            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-300">
-              <AppIcon name="clock" className="w-3.5 h-3.5 text-amber-700" /> 4 Expiring &lt;48h
+          {/* Top row */}
+          <div className="flex items-start justify-between gap-2 mb-3">
+            <div className={`w-9 h-9 rounded-lg ${kpi.iconBg} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-200`}>
+              <AppIcon name={kpi.icon} className={`w-5 h-5 ${kpi.iconColor}`} />
+            </div>
+            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-semibold border ${kpi.badge.bg} ${kpi.badge.text2} ${kpi.badge.border} shrink-0`}>
+              {kpi.badge.text}
             </span>
           </div>
-          <div className="flex items-baseline gap-2">
-            <h2 className="font-headline text-2xl font-bold text-primary tracking-tight">29</h2>
-            <span className="text-xs text-on-surface-variant font-medium">Limitation Watch</span>
-          </div>
-        </div>
-        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1.5 text-on-surface">
-            <AppIcon name="mail" className="w-4 h-4 text-amber-600" />
-            Postal Ack. Delivered: <strong>21</strong>
-          </span>
-          <span className="text-[11px] text-slate-400">8 In-Transit</span>
-        </div>
-      </div>
 
-      {/* Card 4: Available PDF Downloads */}
-      <div
-        onClick={() => onKpiClick && onKpiClick('vault')}
-        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
-        title="View Priority Certified Vault"
-      >
-        <div className="absolute -right-3 -top-3 w-16 h-16 bg-primary-container/10 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
-        <div>
-          <div className="flex items-center justify-between text-xs mb-2">
-            <span className="font-label font-semibold text-on-surface-variant uppercase tracking-wider text-[11px]">
-              Repository Vault
-            </span>
-            <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-              <AppIcon name="shield" className="w-3.5 h-3.5 text-blue-700" /> 3.2 GB Cached
-            </span>
+          {/* Value */}
+          <div className="animate-count-up">
+            <div className="font-headline text-2xl sm:text-3xl font-bold text-primary tracking-tight leading-none">
+              {kpi.key === 'all' ? totalCases.toLocaleString() : kpi.value}
+            </div>
+            <div className="text-xs text-slate-500 font-medium mt-0.5">{kpi.label}</div>
           </div>
-          <div className="flex items-baseline gap-2">
-            <h2 className="font-headline text-2xl font-bold text-primary tracking-tight">3,410</h2>
-            <span className="text-xs text-on-surface-variant font-medium">Archived Files</span>
+
+          {/* Footer */}
+          <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+            <span className={`flex items-center gap-1 font-medium text-slate-700`}>
+              <AppIcon name={kpi.footer.icon} className={`w-3.5 h-3.5 ${kpi.footer.iconColor}`} />
+              {kpi.footer.text}
+            </span>
+            <span className="text-slate-400">{kpi.footer.sub}</span>
           </div>
-        </div>
-        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1.5 text-primary font-medium">
-            <AppIcon name="download" className="w-4 h-4 text-secondary" />
-            Instant One-Click Ready
-          </span>
-          <span className="text-[11px] text-slate-400">SHA-256 Hashed</span>
-        </div>
-      </div>
+        </button>
+      ))}
     </div>
   );
 }

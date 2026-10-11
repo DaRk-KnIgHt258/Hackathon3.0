@@ -523,7 +523,7 @@ export function App() {
   });
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] text-on-surface flex flex-col font-body antialiased">
+    <div className="min-h-screen bg-[#F0F2F5] text-on-surface flex flex-col font-body antialiased">
       {/* 1. TOP APP BAR */}
       <TopAppBar
         searchQuery={searchQuery}
@@ -555,7 +555,7 @@ export function App() {
       />
 
       {/* 3. MAIN WORKSPACE / DASHBOARD CANVAS */}
-      <main className="flex-1 px-4 lg:px-6 py-5 max-w-[1720px] mx-auto w-full space-y-5">
+      <main className="flex-1 px-4 lg:px-6 py-6 max-w-[1720px] mx-auto w-full space-y-6">
         {/* VIEW A: SPLIT-SCREEN JUDGMENT REVIEW WORKSPACE */}
         {activeNav === 'judgments' ? (
           <JudgmentReviewWorkspace
@@ -608,65 +608,59 @@ export function App() {
       {/* 5. FLOATING NYAYA AI ACTION DOCK */}
       {!isChatDrawerOpen && activeNav !== 'judgments' && (
         <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2">
+
           {/* Expandable Quick Actions */}
           {isAiFloatingExpanded && (
-            <div className="flex flex-col items-end gap-1.5 animate-in slide-in-from-bottom-3 duration-150 mb-1">
-              <button
-                onClick={() => {
-                  setIsAiFloatingExpanded(false);
-                  handleOpenAi('statutes');
-                }}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-primary text-xs font-semibold shadow-lg border border-slate-200 hover:border-secondary hover:text-secondary transition active:scale-95 cursor-pointer"
-              >
-                <span>Statutory Sections</span>
-                <AppIcon name="menu_book" className="w-4 h-4 text-secondary" />
-              </button>
-              <button
-                onClick={() => {
-                  setIsAiFloatingExpanded(false);
-                  handleOpenAi('drafter');
-                }}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-primary text-xs font-semibold shadow-lg border border-slate-200 hover:border-secondary hover:text-secondary transition active:scale-95 cursor-pointer"
-              >
-                <span>Draft Legal Notice</span>
-                <AppIcon name="edit_document" className="w-4 h-4 text-secondary" />
-              </button>
-              <button
-                onClick={() => {
-                  setIsAiFloatingExpanded(false);
-                  handleOpenAi('digiseal');
-                }}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-primary text-xs font-semibold shadow-lg border border-slate-200 hover:border-secondary hover:text-secondary transition active:scale-95 cursor-pointer"
-              >
-                <span>Verify DigiSeal</span>
-                <AppIcon name="verified_user" className="w-4 h-4 text-secondary" />
-              </button>
+            <div className="flex flex-col items-end gap-1.5 mb-1 animate-fade-up">
+              {[
+                { label: 'Statutory Sections', icon: 'menu_book',    tab: 'statutes' },
+                { label: 'Draft Legal Notice', icon: 'edit_document', tab: 'drafter' },
+                { label: 'Verify DigiSeal',    icon: 'verified_user', tab: 'digiseal' },
+              ].map((item) => (
+                <button
+                  key={item.tab}
+                  onClick={() => { setIsAiFloatingExpanded(false); handleOpenAi(item.tab); }}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white text-primary text-xs font-semibold
+                             shadow-xl border border-slate-200 hover:border-secondary/60 hover:text-secondary
+                             transition-all duration-150 active:scale-95 cursor-pointer backdrop-blur-sm"
+                >
+                  <span>{item.label}</span>
+                  <AppIcon name={item.icon} className="w-3.5 h-3.5 text-secondary" />
+                </button>
+              ))}
             </div>
           )}
 
-          {/* Main Floating Button */}
-          <div className="flex items-center gap-1">
+          {/* Main FAB Row */}
+          <div className="flex items-center gap-2">
+            {/* Expand toggle */}
             <button
               onClick={() => setIsAiFloatingExpanded(!isAiFloatingExpanded)}
-              className="p-2.5 rounded-full bg-white text-primary hover:bg-slate-50 border border-slate-200 shadow-lg text-xs font-bold transition active:scale-95 cursor-pointer"
+              className="w-9 h-9 rounded-full bg-white text-primary border border-slate-200 shadow-lg
+                         flex items-center justify-center hover:bg-slate-50 hover:border-secondary/40
+                         transition-all duration-200 active:scale-95 cursor-pointer"
               title="More AI Tools"
             >
               <AppIcon
-                name={isAiFloatingExpanded ? 'expand_more' : 'apps'}
-                className="w-4 h-4 text-secondary"
+                name={isAiFloatingExpanded ? 'close' : 'apps'}
+                className={`w-4 h-4 text-secondary transition-transform duration-200 ${isAiFloatingExpanded ? 'rotate-90' : ''}`}
               />
             </button>
 
+            {/* Main AI button */}
             <button
               onClick={() => handleOpenAi('chat')}
-              className="flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-primary to-[#162D4D] text-white hover:brightness-110 border border-secondary/50 shadow-xl transition-all duration-200 active:scale-95 group cursor-pointer"
+              className="flex items-center gap-2.5 px-4 py-2.5 rounded-full
+                         bg-gradient-to-r from-primary via-[#162D4A] to-primary text-white
+                         hover:brightness-110 border border-secondary/40 shadow-xl
+                         transition-all duration-200 active:scale-95 group cursor-pointer"
               title="Open Nyaya AI Legal Assistant"
             >
-              <div className="w-6 h-6 rounded-full bg-secondary text-primary flex items-center justify-center font-bold text-xs shadow-xs group-hover:rotate-12 transition-transform">
-                <AppIcon name="smart_toy" className="w-4 h-4" />
+              <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center shadow-sm group-hover:rotate-12 transition-transform duration-200">
+                <AppIcon name="smart_toy" className="w-3.5 h-3.5 text-primary" />
               </div>
-              <span className="text-xs font-headline font-semibold text-white group-hover:text-secondary transition-colors">
-                Nyaya AI Assistant
+              <span className="text-xs font-headline font-bold text-white group-hover:text-secondary transition-colors">
+                Nyaya AI
               </span>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             </button>
@@ -798,8 +792,10 @@ export function App() {
 
       {/* 7. TOAST NOTIFICATION */}
       {toastMessage && (
-        <div className="fixed bottom-6 left-6 z-50 bg-primary text-white border border-secondary/50 px-4 py-2.5 rounded-lg shadow-2xl flex items-center gap-2.5 text-xs font-label animate-in slide-in-from-bottom duration-200">
-          <AppIcon name="verified" className="w-4 h-4 text-secondary" />
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-primary/95 text-white border border-secondary/40
+                        px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs font-label
+                        animate-fade-up backdrop-blur-sm max-w-sm text-center">
+          <AppIcon name="check_circle" className="w-4 h-4 text-secondary shrink-0" />
           <span>{toastMessage}</span>
         </div>
       )}

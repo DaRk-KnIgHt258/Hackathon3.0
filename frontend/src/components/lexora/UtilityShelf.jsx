@@ -1,216 +1,240 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppIcon from '../common/AppIcon';
 
+const VAULT_ITEMS = [
+  {
+    id: 'causelist',
+    icon: 'picture_as_pdf',
+    iconBg: 'bg-red-50',
+    iconColor: 'text-red-600',
+    iconBorder: 'border-red-200',
+    tag: 'Attested',
+    tagColor: 'text-emerald-700',
+    title: 'SC Daily Cause List – Bench 1 & 2',
+    meta: 'PDF • 4.2 MB',
+    hash: 'SHA: 4a9e88b…19ff02',
+    btnVariant: 'outline',
+    downloadLabel: 'Supreme Court Daily Cause List',
+    downloadSize: '4.2 MB',
+  },
+  {
+    id: 'arnesh',
+    icon: 'workspace_premium',
+    iconBg: 'bg-amber-50',
+    iconColor: 'text-amber-700',
+    iconBorder: 'border-amber-200',
+    tag: 'Gold Seal',
+    tagColor: 'text-secondary',
+    title: 'Certified Judgment – Arnesh Kumar',
+    meta: 'DigiSeal • 1.8 MB',
+    hash: 'SHA: c370a2d…98e411',
+    btnVariant: 'gold',
+    downloadLabel: 'Certified Judgment (Arnesh Kumar)',
+    downloadSize: '1.8 MB',
+  },
+  {
+    id: 'caveat',
+    icon: 'edit_document',
+    iconBg: 'bg-blue-50',
+    iconColor: 'text-blue-700',
+    iconBorder: 'border-blue-200',
+    tag: 'e-Filing',
+    tagColor: 'text-slate-600',
+    title: 'Caveat Petition Lodgment Format',
+    meta: 'Fillable • 840 KB',
+    hash: 'SHA: ee1892f…76ba32',
+    btnVariant: 'outline',
+    downloadLabel: 'Caveat Petition Format',
+    downloadSize: '840 KB',
+  },
+];
+
+const NOTICE_ITEMS = [
+  {
+    id: '#LN-2025-0842',
+    title: 'Statutory Notice under Sec 138 NI Act',
+    served: 'Global Mercantile Ltd. & MD',
+    timeLeft: '6 Days Remaining',
+    timeColor: 'bg-amber-100 text-amber-900 border-amber-300',
+    status: 'Delivered (Ack Due)',
+    statusColor: 'text-emerald-700',
+    action: 'pod',
+    actionLabel: 'POD Slip',
+  },
+  {
+    id: '#LN-2025-0839',
+    title: 'Demand & Cease-Desist (Trademark)',
+    served: 'Apex Retail & Logistics LLP',
+    timeLeft: '11 Days',
+    timeColor: 'bg-blue-50 text-blue-800 border-blue-200',
+    status: 'In-Transit (#ED81249)',
+    statusColor: 'text-amber-700',
+    action: 'track',
+    actionLabel: 'Track',
+  },
+  {
+    id: '#LN-2025-0821',
+    title: 'Sec 80 CPC Statutory Notice (UOI)',
+    served: 'Ministry of Corporate Affairs',
+    timeLeft: 'Response Received',
+    timeColor: 'bg-emerald-100 text-emerald-900 border-emerald-300',
+    status: 'Delivered & Docketed',
+    statusColor: 'text-slate-600',
+    action: 'response_pdf',
+    actionLabel: 'View PDF',
+  },
+];
+
 export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
+  const [vaultOpen, setVaultOpen] = useState(true);
+  const [noticesOpen, setNoticesOpen] = useState(true);
+
   return (
-    <div className="bg-surface rounded-lg border border-outline-variant shadow-sm p-4">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 border border-secondary/30">
-            <AppIcon name="verified" className="w-5 h-5 text-secondary" />
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 animate-fade-up stagger-2">
+
+      {/* ── PRIORITY DOWNLOAD VAULT ─────────────────────────── */}
+      <div className="bg-white rounded-xl border border-outline-variant shadow-2xs overflow-hidden">
+        {/* Panel header */}
+        <button
+          className="w-full flex items-center justify-between px-4 py-3 border-b border-slate-100 hover:bg-slate-50/60 transition-colors cursor-pointer group"
+          onClick={() => setVaultOpen(!vaultOpen)}
+        >
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-secondary-container border border-secondary/30 flex items-center justify-center">
+              <AppIcon name="download" className="w-4.5 h-4.5 text-secondary" />
+            </div>
+            <div className="text-left">
+              <span className="block text-sm font-headline font-bold text-primary">Priority Download Vault</span>
+              <span className="block text-[10px] text-slate-500">SHA-256 verified certified documents</span>
+            </div>
           </div>
-          <div>
-            <h4 className="font-headline text-sm font-bold text-primary tracking-tight">
-              Quick Certified Downloads & Legal Notices Radar
-            </h4>
-            <p className="text-[11px] text-on-surface-variant">
-              Instant 1-Click with SHA-256 Court Verification & limitation countdown overview
-            </p>
+          <div className="flex items-center gap-2">
+            <span className="bg-secondary/15 text-secondary border border-secondary/30 text-[10px] font-mono px-2 py-0.5 rounded font-semibold hidden sm:inline">
+              Live Vault
+            </span>
+            <AppIcon
+              name={vaultOpen ? 'expand_less' : 'expand_more'}
+              className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors"
+            />
           </div>
-        </div>
-        <div className="flex items-center gap-2.5">
-          <span className="bg-secondary/20 text-secondary border border-secondary/40 text-[10px] font-mono px-2 py-0.5 rounded font-semibold">
-            Live Vault
-          </span>
-          <button
-            onClick={() => onNoticeAction && onNoticeAction('issue')}
-            className="text-xs text-secondary hover:underline font-semibold font-label transition"
-          >
-            + Issue Notice
-          </button>
-        </div>
+        </button>
+
+        {/* Panel body */}
+        {vaultOpen && (
+          <div className="p-3 grid grid-cols-1 sm:grid-cols-3 gap-2.5 animate-fade-scale">
+            {VAULT_ITEMS.map((item, idx) => (
+              <div
+                key={item.id}
+                className={`rounded-lg border border-outline-variant bg-slate-50/50 p-3 flex flex-col justify-between card-hover animate-fade-up stagger-${idx + 1}`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`w-7 h-7 rounded-lg ${item.iconBg} ${item.iconColor} flex items-center justify-center border ${item.iconBorder}`}>
+                      <AppIcon name={item.icon} className="w-3.5 h-3.5" />
+                    </span>
+                    <span className={`text-[9px] font-semibold font-mono ${item.tagColor}`}>{item.tag}</span>
+                  </div>
+                  <h5 className="text-xs font-semibold text-primary font-headline leading-snug line-clamp-2 mb-1">
+                    {item.title}
+                  </h5>
+                  <p className="text-[10px] text-slate-500 font-mono">{item.meta}</p>
+                  <p className="text-[9px] text-slate-400 font-mono truncate">{item.hash}</p>
+                </div>
+                <button
+                  onClick={() => onDownloadItem?.(item.downloadLabel, item.downloadSize)}
+                  className={`mt-2.5 w-full py-1.5 rounded-lg font-semibold text-xs flex items-center justify-center gap-1.5
+                    transition-all duration-150 active:scale-95 cursor-pointer
+                    ${item.btnVariant === 'gold'
+                      ? 'bg-secondary text-primary hover:bg-[#d6b46b] shadow-sm'
+                      : 'bg-surface hover:bg-secondary-container text-primary border border-outline-variant hover:border-secondary/40'
+                    }`}
+                >
+                  <AppIcon name="download" className="w-3.5 h-3.5" />
+                  Download
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Horizontal Split Shelf for Vault Items & Statutory Notices */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-3.5">
-        {/* Priority Download Vault */}
-        <div className="space-y-2">
-          <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 font-label flex items-center gap-1.5">
-            <AppIcon name="download" className="w-3.5 h-3.5 text-secondary" /> Priority Download Vault
-          </span>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            {/* Download Card 1 */}
-            <div className="p-2.5 rounded bg-surface-container-low border border-outline-variant hover:border-secondary/40 transition flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="w-6 h-6 rounded bg-red-50 text-red-700 flex items-center justify-center border border-red-200">
-                    <AppIcon name="picture_as_pdf" className="w-3.5 h-3.5" />
-                  </span>
-                  <span className="text-[9px] text-emerald-700 font-semibold font-mono flex items-center gap-1">
-                    <AppIcon name="verified" className="w-3 h-3 text-emerald-600" /> Attested
-                  </span>
-                </div>
-                <h5 className="text-xs font-semibold text-primary font-headline leading-tight line-clamp-2">
-                  Supreme Court Daily Cause List – Bench 1 & 2
-                </h5>
-                <p className="text-[10px] text-on-surface-variant font-mono mt-1">PDF • 4.2 MB</p>
-                <p className="text-[9px] text-slate-400 font-mono truncate">SHA: 4a9e88b...19ff02</p>
-              </div>
-              <button
-                onClick={() => onDownloadItem && onDownloadItem('Supreme Court Daily Cause List', '4.2 MB')}
-                className="mt-2 w-full py-1 rounded bg-secondary-container hover:bg-secondary text-primary font-semibold text-xs border border-secondary/40 transition flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
-              >
-                <AppIcon name="download" className="w-3.5 h-3.5" /> Get
-              </button>
+      {/* ── ACTIVE LIMITATION TIMELINES ─────────────────────── */}
+      <div className="bg-white rounded-xl border border-outline-variant shadow-2xs overflow-hidden">
+        {/* Panel header */}
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+          <button
+            className="flex items-center gap-2.5 flex-1 text-left group cursor-pointer"
+            onClick={() => setNoticesOpen(!noticesOpen)}
+          >
+            <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center">
+              <AppIcon name="timer" className="w-4.5 h-4.5 text-amber-600" />
             </div>
-
-            {/* Download Card 2 */}
-            <div className="p-2.5 rounded bg-surface-container-low border border-outline-variant hover:border-secondary/40 transition flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="w-6 h-6 rounded bg-amber-50 text-amber-800 flex items-center justify-center border border-amber-200">
-                    <AppIcon name="workspace_premium" className="w-3.5 h-3.5 text-amber-700" />
-                  </span>
-                  <span className="text-[9px] text-secondary font-semibold font-mono">Gold Seal</span>
-                </div>
-                <h5 className="text-xs font-semibold text-primary font-headline leading-tight line-clamp-2">
-                  Certified Decreed Judgment (Arnesh Kumar)
-                </h5>
-                <p className="text-[10px] text-on-surface-variant font-mono mt-1">DigiSeal Signed • 1.8 MB</p>
-                <p className="text-[9px] text-slate-400 font-mono truncate">SHA: c370a2d...98e411</p>
-              </div>
-              <button
-                onClick={() => onDownloadItem && onDownloadItem('Certified Judgment (Arnesh Kumar)', '1.8 MB')}
-                className="mt-2 w-full py-1 rounded bg-secondary text-primary font-semibold text-xs hover:bg-[#d6b46b] transition flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
-              >
-                <AppIcon name="download" className="w-3.5 h-3.5" /> Get
-              </button>
+            <div>
+              <span className="block text-sm font-headline font-bold text-primary">Legal Notices Radar</span>
+              <span className="block text-[10px] text-slate-500">Active limitation countdown timelines</span>
             </div>
-
-            {/* Download Card 3 */}
-            <div className="p-2.5 rounded bg-surface-container-low border border-outline-variant hover:border-secondary/40 transition flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="w-6 h-6 rounded bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
-                    <AppIcon name="edit_document" className="w-3.5 h-3.5 text-blue-700" />
-                  </span>
-                  <span className="text-[9px] text-slate-600 font-mono">e-Filing Ready</span>
-                </div>
-                <h5 className="text-xs font-semibold text-primary font-headline leading-tight line-clamp-2">
-                  Caveat Petition Lodgment Notice Format
-                </h5>
-                <p className="text-[10px] text-on-surface-variant font-mono mt-1">Fillable Form • 840 KB</p>
-                <p className="text-[9px] text-slate-400 font-mono truncate">SHA: ee1892f...76ba32</p>
-              </div>
-              <button
-                onClick={() => onDownloadItem && onDownloadItem('Caveat Petition Format', '840 KB')}
-                className="mt-2 w-full py-1 rounded bg-surface hover:bg-slate-100 text-primary font-semibold text-xs border border-outline-variant transition flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
-              >
-                <AppIcon name="download" className="w-3.5 h-3.5" /> Get
-              </button>
-            </div>
-          </div>
+            <AppIcon
+              name={noticesOpen ? 'expand_less' : 'expand_more'}
+              className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors ml-auto"
+            />
+          </button>
+          <button
+            onClick={() => onNoticeAction?.('issue')}
+            className="ml-3 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-secondary/10 hover:bg-secondary/20 text-secondary text-xs font-semibold border border-secondary/20 transition-all duration-150 active:scale-95 cursor-pointer shrink-0"
+          >
+            <AppIcon name="add" className="w-3.5 h-3.5" />
+            Issue Notice
+          </button>
         </div>
 
-        {/* Notices Mini-Strip */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 font-label flex items-center gap-1.5">
-              <AppIcon name="timer" className="w-3.5 h-3.5 text-amber-600" /> Active Limitation Timelines
-            </span>
-            <button
-              onClick={() => onNoticeAction && onNoticeAction('browse_archives')}
-              className="text-primary hover:text-secondary font-semibold text-[11px] flex items-center gap-1 transition"
-            >
-              Browse All 3,410 Certified PDF Archives
-              <AppIcon name="arrow_forward" className="w-3 h-3 text-secondary" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-            {/* Notice Card 1 */}
-            <div className="p-2.5 rounded bg-surface-container-low border border-outline-variant hover:border-secondary/40 transition flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between text-[10px] mb-1">
-                  <span className="font-mono font-bold text-primary">#LN-2025-0842</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-amber-100 text-amber-900 border border-amber-300">
-                    6 Days Remaining
-                  </span>
+        {/* Panel body */}
+        {noticesOpen && (
+          <div className="divide-y divide-slate-100 animate-fade-scale">
+            {NOTICE_ITEMS.map((notice, idx) => (
+              <div
+                key={notice.id}
+                className={`px-4 py-3 hover:bg-slate-50/60 transition-colors group animate-fade-up stagger-${idx + 1}`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <span className="font-mono text-[10px] font-bold text-primary">{notice.id}</span>
+                      <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold border ${notice.timeColor}`}>
+                        {notice.timeLeft}
+                      </span>
+                    </div>
+                    <h5 className="text-xs font-semibold text-slate-800 font-headline leading-tight truncate">
+                      {notice.title}
+                    </h5>
+                    <p className="text-[10px] text-slate-500 mt-0.5 truncate">
+                      Served to: <strong className="text-slate-700">{notice.served}</strong>
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onNoticeAction?.(notice.action, notice.id)}
+                    className="shrink-0 px-2.5 py-1 rounded-lg bg-surface hover:bg-secondary-container border border-outline-variant
+                               hover:border-secondary/40 text-[11px] font-semibold text-primary hover:text-secondary
+                               transition-all duration-150 active:scale-95 cursor-pointer"
+                  >
+                    {notice.actionLabel}
+                  </button>
                 </div>
-                <h5 className="text-xs font-semibold text-slate-800 leading-snug font-headline line-clamp-1">
-                  Statutory Notice under Sec 138 NI Act
-                </h5>
-                <p className="text-[10px] text-on-surface-variant mt-1 line-clamp-1">
-                  Served to: <strong>Global Mercantile Ltd. & MD</strong>
-                </p>
-              </div>
-              <div className="mt-2 pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[10px]">
-                <span className="text-emerald-700 font-medium truncate">Delivered (Ack Due)</span>
-                <button
-                  onClick={() => onNoticeAction && onNoticeAction('pod', '#LN-2025-0842')}
-                  className="text-primary hover:text-secondary font-semibold shrink-0 ml-1 cursor-pointer"
-                >
-                  POD Slip
-                </button>
-              </div>
-            </div>
-
-            {/* Notice Card 2 */}
-            <div className="p-2.5 rounded bg-surface-container-low border border-outline-variant hover:border-secondary/40 transition flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between text-[10px] mb-1">
-                  <span className="font-mono font-bold text-primary">#LN-2025-0839</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-medium bg-blue-50 text-blue-800 border border-blue-200">
-                    11 Days Remaining
-                  </span>
+                <div className="mt-1.5 flex items-center gap-1">
+                  <span className={`text-[10px] font-medium ${notice.statusColor}`}>{notice.status}</span>
                 </div>
-                <h5 className="text-xs font-semibold text-slate-800 leading-snug font-headline line-clamp-1">
-                  Demand & Cease-Desist Notice (Trademark)
-                </h5>
-                <p className="text-[10px] text-on-surface-variant mt-1 line-clamp-1">
-                  Served to: <strong>Apex Retail & Logistics LLP</strong>
-                </p>
               </div>
-              <div className="mt-2 pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[10px]">
-                <span className="text-amber-700 font-medium truncate">In-Transit (#ED81249)</span>
-                <button
-                  onClick={() => onNoticeAction && onNoticeAction('track', '#LN-2025-0839')}
-                  className="text-primary hover:text-secondary font-semibold shrink-0 ml-1 cursor-pointer"
-                >
-                  Track
-                </button>
-              </div>
-            </div>
-
-            {/* Notice Card 3 */}
-            <div className="p-2.5 rounded bg-surface-container-low border border-outline-variant hover:border-secondary/40 transition flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between text-[10px] mb-1">
-                  <span className="font-mono font-bold text-primary">#LN-2025-0821</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-300">
-                    Response Received
-                  </span>
-                </div>
-                <h5 className="text-xs font-semibold text-slate-800 leading-snug font-headline line-clamp-1">
-                  Sec 80 CPC Statutory Notice (UOI)
-                </h5>
-                <p className="text-[10px] text-on-surface-variant mt-1 line-clamp-1">
-                  Respondent: <strong>Ministry of Corporate Affairs</strong>
-                </p>
-              </div>
-              <div className="mt-2 pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[10px]">
-                <span className="text-slate-600 font-medium truncate">Delivered & Docketed</span>
-                <button
-                  onClick={() => onNoticeAction && onNoticeAction('response_pdf', '#LN-2025-0821')}
-                  className="text-primary hover:text-secondary font-bold shrink-0 ml-1 flex items-center gap-1 cursor-pointer"
-                >
-                  <AppIcon name="description" className="w-3 h-3 text-secondary" /> PDF
-                </button>
-              </div>
+            ))}
+            <div className="px-4 py-2.5">
+              <button
+                onClick={() => onNoticeAction?.('browse_archives')}
+                className="flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-secondary transition-colors cursor-pointer"
+              >
+                Browse all 3,410 certified PDF archives
+                <AppIcon name="arrow_forward" className="w-3.5 h-3.5 text-secondary" />
+              </button>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

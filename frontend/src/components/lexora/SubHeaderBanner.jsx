@@ -1,93 +1,90 @@
 import React, { useState } from 'react';
 import { AppIcon } from '../common/AppIcon';
 
+const SECTION_CONFIG = {
+  judgments: {
+    icon: 'splitscreen',
+    title: 'Judgments & Workspace',
+    desc: 'Split-screen review, statutory reasoning, and document analysis',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50',
+  },
+  causelist: {
+    icon: 'format_list_numbered',
+    title: 'Registry Cause Lists',
+    desc: 'Daily listings and roster intelligence across all benches',
+    color: 'text-sky-600',
+    bg: 'bg-sky-50',
+  },
+  statutes: {
+    icon: 'menu_book',
+    title: 'Statutory Repository',
+    desc: 'Bharatiya Nyaya Sanhita, CrPC, CPC and constitutional codes',
+    color: 'text-violet-600',
+    bg: 'bg-violet-50',
+  },
+  notices: {
+    icon: 'notifications_active',
+    title: 'Legal Notices Radar',
+    desc: 'DigiSeal certified notices, limitation countdown & dispatch tracking',
+    color: 'text-amber-600',
+    bg: 'bg-amber-50',
+  },
+  docket: {
+    icon: 'account_balance',
+    title: 'Docket Intelligence Dashboard',
+    desc: 'Active matters, certified decrees and cause intelligence across India\'s courts',
+    color: 'text-emerald-600',
+    bg: 'bg-emerald-50',
+  },
+};
+
 export function SubHeaderBanner({ activeNav = 'docket', onSyncFeed }) {
   const [isSyncing, setIsSyncing] = useState(false);
 
   const handleSync = () => {
     setIsSyncing(true);
-    if (onSyncFeed) onSyncFeed();
-    setTimeout(() => {
-      setIsSyncing(false);
-    }, 1200);
+    onSyncFeed?.();
+    setTimeout(() => setIsSyncing(false), 1200);
   };
 
-  const getBreadcrumbConfig = () => {
-    switch (activeNav) {
-      case 'judgments':
-        return {
-          icon: 'splitscreen',
-          section: 'Judgments & Workspace',
-          label: 'Split-Screen Judgment Review & Statutory Reasoner',
-        };
-      case 'causelist':
-        return {
-          icon: 'format_list_numbered',
-          section: 'Registry Cause Lists',
-          label: 'Daily Listing & Roster Intelligence Deck',
-        };
-      case 'statutes':
-        return {
-          icon: 'menu_book',
-          section: 'Statutory Repository',
-          label: 'Bharatiya Nyaya Sanhita & Constitutional Codes',
-        };
-      case 'notices':
-        return {
-          icon: 'notifications_active',
-          section: 'Registry Dispatches',
-          label: 'DigiSeal Certified Legal Notices & Summons',
-        };
-      case 'docket':
-      default:
-        return {
-          icon: 'domain',
-          section: 'Registry Appellate Side',
-          label: 'Active Docket Intelligence Dashboard',
-        };
-    }
-  };
-
-  const config = getBreadcrumbConfig();
+  const cfg = SECTION_CONFIG[activeNav] || SECTION_CONFIG.docket;
 
   return (
-    <section className="bg-white border-b border-outline-variant px-4 sm:px-6 py-2.5 shadow-2xs">
-      <div className="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-3">
-        {/* Dynamic Breadcrumb Cluster */}
-        <div className="flex items-center gap-2 text-xs font-label text-on-surface-variant overflow-x-auto">
-          <AppIcon name={config.icon} className="w-4 h-4 text-primary shrink-0" />
-          <a className="hover:text-primary font-medium text-slate-600 shrink-0 transition-colors" href="#sc">
-            Supreme Court of India
-          </a>
-          <span className="text-slate-400">/</span>
-          <span className="text-on-surface font-medium shrink-0">
-            {config.section}
-          </span>
-          <span className="text-slate-400">/</span>
-          <span className="text-primary font-semibold tracking-tight shrink-0 font-headline">
-            {config.label}
-          </span>
+    <div className="bg-white border-b border-outline-variant shadow-2xs">
+      <div className="max-w-[1720px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+
+        {/* Left: section identity */}
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className={`w-7 h-7 rounded-lg ${cfg.bg} flex items-center justify-center shrink-0`}>
+            <AppIcon name={cfg.icon} className={`w-4 h-4 ${cfg.color}`} />
+          </div>
+          <div className="min-w-0">
+            <span className="block text-xs font-headline font-bold text-primary truncate">{cfg.title}</span>
+            <span className="block text-[10px] text-slate-500 truncate hidden sm:block">{cfg.desc}</span>
+          </div>
         </div>
 
-        {/* Right Badges & Actions */}
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-secondary-container text-on-secondary-container border border-secondary/30 text-xs font-semibold font-label shadow-2xs">
-            <AppIcon name="verified" className="w-3.5 h-3.5 text-secondary" />
-            Institutional DigiSeal Enrolled
+        {/* Right: status + sync */}
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="hidden md:inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container border border-secondary/20 text-[10px] font-semibold font-label">
+            <AppIcon name="verified" className="w-3 h-3 text-secondary" />
+            DigiSeal Enrolled
           </span>
           <button
             onClick={handleSync}
-            className="px-3 py-1 rounded bg-surface hover:bg-surface-container border border-outline-variant text-xs font-medium text-on-surface flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
-            title="Synchronize registry feed with CIS 3.2 database"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface hover:bg-surface-container border border-outline-variant
+                       text-xs font-medium text-on-surface transition-all duration-150 active:scale-95 cursor-pointer"
+            title="Sync with CIS 3.2 e-Courts"
           >
             <AppIcon
-              name="cached"
-              className={`w-3.5 h-3.5 text-slate-600 ${isSyncing ? 'animate-spin text-secondary' : ''}`}
+              name="sync"
+              className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-500 ${isSyncing ? 'animate-spin text-secondary' : ''}`}
             />
-            {isSyncing ? 'Syncing...' : 'Sync e-Court Feed'}
+            <span className="hidden sm:inline">{isSyncing ? 'Syncing…' : 'Sync Feed'}</span>
           </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
