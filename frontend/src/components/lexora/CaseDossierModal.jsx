@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AppIcon from '../common/AppIcon';
 
 export function CaseDossierModal({
   dossier,
@@ -38,8 +39,8 @@ export function CaseDossierModal({
               <span className="text-[11px] font-mono bg-white/10 text-slate-200 px-2 py-0.5 rounded">
                 {dossier.citation}
               </span>
-              <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 px-2 py-0.5 rounded-full">
-                <span className="material-symbols-outlined text-[12px]">verified</span> DigiSeal Attested
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 px-2 py-0.5 rounded-full">
+                <AppIcon name="verified" className="w-3.5 h-3.5 text-emerald-300" /> DigiSeal Attested
               </span>
             </div>
             <h3 className="font-headline text-lg sm:text-xl font-bold text-white mt-2 leading-tight">
@@ -55,7 +56,7 @@ export function CaseDossierModal({
             className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer"
             title="Close Dossier"
           >
-            <span className="material-symbols-outlined text-[24px]">close</span>
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -80,7 +81,7 @@ export function CaseDossierModal({
           <div className="bg-surface rounded-lg p-4 border border-outline-variant shadow-2xs space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary text-[20px]">gavel</span>
+                <AppIcon name="gavel" className="w-4 h-4 text-secondary" />
                 <h4 className="font-headline font-bold text-sm text-primary">
                   Advocate Headnote & Ratio Decidendi
                 </h4>
@@ -99,7 +100,7 @@ export function CaseDossierModal({
           <div className="bg-surface rounded-lg p-4 border border-outline-variant shadow-2xs space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-amber-600 text-[20px]">translate</span>
+                <AppIcon name="translate" className="w-4 h-4 text-amber-600" />
                 <h4 className="font-headline font-bold text-sm text-primary">
                   Citizen-Facing Plain Language Summary
                 </h4>
@@ -136,7 +137,7 @@ export function CaseDossierModal({
           {dossier.statuteDetails && (
             <div className="bg-surface rounded-lg p-4 border border-outline-variant shadow-2xs space-y-3">
               <h4 className="font-headline font-bold text-sm text-primary flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary text-[18px]">menu_book</span>
+                <AppIcon name="menu_book" className="w-4 h-4 text-secondary" />
                 Statutory Codes & Procedural Impact
               </h4>
               <div className="space-y-2">
@@ -166,16 +167,14 @@ export function CaseDossierModal({
               }}
               className="px-3.5 py-2 rounded-lg bg-secondary text-primary font-bold text-xs hover:bg-[#d6b46b] transition flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[16px]">download</span>
+              <AppIcon name="download" className="w-4 h-4" />
               Download Certified PDF
             </button>
             <button
               onClick={handleCopyCitation}
-              className="px-3 py-2 rounded-lg bg-surface hover:bg-slate-100 border border-outline-variant text-primary text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
+              className="px-3 py-2 rounded-lg bg-surface hover:bg-slate-100 border border-outline-variant text-primary text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[15px]">
-                {copied ? 'check' : 'content_copy'}
-              </span>
+              <AppIcon name={copied ? 'check' : 'content_copy'} className="w-3.5 h-3.5" />
               {copied ? 'Citation Copied!' : 'Copy Citation'}
             </button>
           </div>
@@ -190,7 +189,7 @@ export function CaseDossierModal({
                 className="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
                 title="Open Split-Screen Document Review Workspace"
               >
-                <span className="material-symbols-outlined text-[16px] text-primary">splitscreen</span>
+                <AppIcon name="splitscreen" className="w-4 h-4 text-primary" />
                 Split-Screen Workspace
               </button>
             )}
@@ -202,7 +201,7 @@ export function CaseDossierModal({
               }}
               className="px-3.5 py-2 rounded-lg bg-primary hover:bg-primary-container text-white text-xs font-semibold flex items-center gap-1.5 shadow-sm transition active:scale-95 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[16px] text-secondary">smart_toy</span>
+              <AppIcon name="smart_toy" className="w-4 h-4 text-secondary" />
               Ask Nyaya AI about Case
             </button>
           </div>
@@ -211,3 +210,5 @@ export function CaseDossierModal({
     </div>
   );
 }
+
+export default CaseDossierModal;

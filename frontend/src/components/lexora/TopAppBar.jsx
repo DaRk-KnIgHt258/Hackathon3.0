@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { AppIcon } from '../common/AppIcon';
 
 export function TopAppBar({
   searchQuery,
@@ -65,20 +66,20 @@ export function TopAppBar({
           <div
             onClick={() => onNavChange && onNavChange('docket')}
             className="font-headline text-xl font-bold text-on-primary tracking-tight flex items-center gap-2.5 group cursor-pointer"
-            title="LexoraDocs - Bench v4.2"
+            title="NyayaSutra - Bench v4.2"
           >
             <div className="w-9 h-9 rounded bg-[#162A4D] border border-secondary/50 flex items-center justify-center text-secondary shadow-inner group-hover:border-secondary transition">
-              <span className="material-symbols-outlined fill-icon text-[22px]">balance</span>
+              <AppIcon name="balance" className="w-5 h-5 text-secondary" />
             </div>
             <div className="flex flex-col">
               <span className="leading-tight text-white flex items-center gap-1.5 font-bold tracking-tight">
-                LexoraDocs
+                NyayaSutra
                 <span className="text-[9px] uppercase tracking-wider bg-secondary/20 text-secondary px-1.5 py-0.5 rounded font-label font-semibold border border-secondary/40">
                   Bench v4.2
                 </span>
               </span>
               <span className="text-[10px] text-slate-300 font-label tracking-normal font-normal">
-                Judicial Docket Intelligence
+                Indian Judicial Docket Intelligence
               </span>
             </div>
           </div>
@@ -103,7 +104,7 @@ export function TopAppBar({
                       : 'text-on-primary/80 hover:text-on-primary font-medium border-b-2 border-transparent'
                   }`}
                 >
-                  <span className="material-symbols-outlined text-[17px]">{nav.icon}</span>
+                  <AppIcon name={nav.icon} className="w-4 h-4 shrink-0" />
                   {nav.label}
                 </button>
               );
@@ -112,10 +113,11 @@ export function TopAppBar({
         </div>
 
         {/* CNR / Docket Universal Search */}
+        {/* CNR / Docket Universal Search */}
         <div className="flex-1 max-w-2xl hidden md:block">
           <div className="relative flex items-center">
             <div className="absolute left-3.5 flex items-center pointer-events-none text-secondary">
-              <span className="material-symbols-outlined text-[19px]">search</span>
+              <AppIcon name="search" className="w-4 h-4 text-secondary" />
             </div>
             <input
               ref={searchInputRef}
@@ -136,10 +138,10 @@ export function TopAppBar({
               <button
                 type="button"
                 onClick={onOpenAdvancedSearch}
-                className="text-slate-400 hover:text-secondary text-xs px-1.5 py-1 rounded hover:bg-white/10 transition"
+                className="text-slate-400 hover:text-secondary text-xs p-1.5 rounded hover:bg-white/10 transition cursor-pointer"
                 title="Advanced Search Filter"
               >
-                <span className="material-symbols-outlined text-[18px]">tune</span>
+                <AppIcon name="tune" className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -155,9 +157,10 @@ export function TopAppBar({
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               <span className="font-medium max-w-[150px] truncate">{currentForumLabel}</span>
-              <span className="material-symbols-outlined text-slate-400 text-[16px]">
-                {isForumDropdownOpen ? 'expand_less' : 'expand_more'}
-              </span>
+              <AppIcon
+                name={isForumDropdownOpen ? 'chevron_up' : 'chevron_down'}
+                className="w-3.5 h-3.5 text-slate-400"
+              />
             </button>
 
             {isForumDropdownOpen && (
@@ -172,13 +175,13 @@ export function TopAppBar({
                       if (onSelectForum) onSelectForum(opt.id);
                       setIsForumDropdownOpen(false);
                     }}
-                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-50 transition ${
+                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-slate-50 transition cursor-pointer ${
                       selectedForum === opt.id ? 'font-bold text-primary bg-secondary-container/30' : 'text-slate-700'
                     }`}
                   >
                     <span>{opt.label}</span>
                     {selectedForum === opt.id && (
-                      <span className="material-symbols-outlined text-secondary text-[16px]">check</span>
+                      <AppIcon name="check" className="w-3.5 h-3.5 text-secondary" />
                     )}
                   </button>
                 ))}
@@ -193,7 +196,7 @@ export function TopAppBar({
             title="Open Nyaya AI Legal Copilot & Tools"
           >
             <div className="w-5 h-5 rounded-full bg-primary text-secondary flex items-center justify-center text-[12px] shadow-xs group-hover:rotate-12 transition-transform">
-              <span className="material-symbols-outlined text-[14px]">smart_toy</span>
+              <AppIcon name="smart_toy" className="w-3 h-3 text-secondary" />
             </div>
             <span className="tracking-tight">Nyaya AI</span>
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
@@ -205,7 +208,7 @@ export function TopAppBar({
             className="p-2 rounded-lg text-slate-300 hover:text-secondary hover:bg-primary-container/50 transition-colors relative cursor-pointer"
             title="Docket Alerts & Notifications"
           >
-            <span className="material-symbols-outlined text-[20px]">notifications</span>
+            <AppIcon name="notifications" className="w-4 h-4" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-400 ring-2 ring-primary"></span>
           </button>
 
@@ -215,7 +218,7 @@ export function TopAppBar({
             className="p-2 rounded-lg text-slate-300 hover:text-secondary hover:bg-primary-container/50 transition-colors cursor-pointer"
             title="Registry & e-Filing Support Desk"
           >
-            <span className="material-symbols-outlined text-[20px]">help_outline</span>
+            <AppIcon name="help_outline" className="w-4 h-4" />
           </button>
 
           {/* CTA File New Docket */}
@@ -223,7 +226,7 @@ export function TopAppBar({
             onClick={onOpenNewDocket}
             className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold font-label bg-[#172D4E] hover:bg-[#1D3557] text-white border border-slate-700 transition-colors shadow-xs active:scale-95 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[16px] text-secondary">add_circle</span>
+            <AppIcon name="add_circle" className="w-4 h-4 text-secondary" />
             File New Docket
           </button>
 
@@ -250,9 +253,7 @@ export function TopAppBar({
                 Senior Advocate • SC Bar
               </span>
             </div>
-            <span className="material-symbols-outlined text-slate-400 group-hover:text-white text-[16px]">
-              arrow_drop_down
-            </span>
+            <AppIcon name="chevron_down" className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
           </div>
         </div>
       </div>
@@ -261,7 +262,7 @@ export function TopAppBar({
       <div className="bg-[#0D1F38] px-4 sm:px-6 py-1.5 border-t border-slate-800/80 flex items-center justify-between text-xs">
         <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto custom-scroll py-0.5">
           <span className="text-slate-400 font-label text-[11px] uppercase tracking-wider font-semibold flex items-center gap-1 shrink-0">
-            <span className="material-symbols-outlined text-[14px] text-secondary">filter_alt</span> Index Keys:
+            <AppIcon name="filter_alt" className="w-3.5 h-3.5 text-secondary" /> Index Keys:
           </span>
           {[
             { id: 'all', label: 'All Fields' },

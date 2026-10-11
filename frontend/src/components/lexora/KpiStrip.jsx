@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppIcon } from '../common/AppIcon';
 
 export function KpiStrip({ totalCases = 1248, onKpiClick }) {
   return (
@@ -16,7 +17,7 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
               Docket Intelligence
             </span>
             <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              <span className="material-symbols-outlined text-[13px]">trending_up</span> +14 this wk
+              <AppIcon name="trending_up" className="w-3.5 h-3.5 text-emerald-700" /> +14 this wk
             </span>
           </div>
           <div className="flex items-baseline gap-2">
@@ -27,8 +28,8 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
           </div>
         </div>
         <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1 text-primary font-medium">
-            <span className="material-symbols-outlined text-[15px] text-secondary">event_note</span>
+          <span className="flex items-center gap-1.5 text-primary font-medium">
+            <AppIcon name="calendar" className="w-4 h-4 text-secondary" />
             <strong>3 Listed Today</strong> (Bench 4 & 9)
           </span>
           <span className="text-[11px] text-slate-400">98.4% On-Track</span>
@@ -48,7 +49,7 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
               Decrees & Rulings
             </span>
             <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-secondary-container text-on-secondary-container border border-secondary/30">
-              <span className="material-symbols-outlined text-[13px]">verified</span> Watermarked
+              <AppIcon name="verified" className="w-3.5 h-3.5 text-secondary" /> Watermarked
             </span>
           </div>
           <div className="flex items-baseline gap-2">
@@ -57,8 +58,8 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
           </div>
         </div>
         <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1 text-primary font-medium">
-            <span className="material-symbols-outlined text-[15px] text-secondary">military_tech</span>
+          <span className="flex items-center gap-1.5 text-primary font-medium">
+            <AppIcon name="award" className="w-4 h-4 text-secondary" />
             DigiSeal Attested Copies
           </span>
           <span className="text-[11px] text-slate-400">12 Pending Seal</span>
@@ -78,7 +79,7 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
               Statutory Notices
             </span>
             <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-300">
-              <span className="material-symbols-outlined text-[13px]">timer</span> 4 Expiring &lt;48h
+              <AppIcon name="clock" className="w-3.5 h-3.5 text-amber-700" /> 4 Expiring &lt;48h
             </span>
           </div>
           <div className="flex items-baseline gap-2">
@@ -87,8 +88,8 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
           </div>
         </div>
         <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1 text-on-surface">
-            <span className="material-symbols-outlined text-[15px] text-amber-600">mark_email_unread</span>
+          <span className="flex items-center gap-1.5 text-on-surface">
+            <AppIcon name="mail" className="w-4 h-4 text-amber-600" />
             Postal Ack. Delivered: <strong>21</strong>
           </span>
           <span className="text-[11px] text-slate-400">8 In-Transit</span>
@@ -108,7 +109,7 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
               Repository Vault
             </span>
             <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-              <span className="material-symbols-outlined text-[13px]">cloud_done</span> 3.2 GB Cached
+              <AppIcon name="shield" className="w-3.5 h-3.5 text-blue-700" /> 3.2 GB Cached
             </span>
           </div>
           <div className="flex items-baseline gap-2">
@@ -117,8 +118,8 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
           </div>
         </div>
         <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-on-surface-variant">
-          <span className="flex items-center gap-1 text-primary font-medium">
-            <span className="material-symbols-outlined text-[15px] text-secondary">file_download_done</span>
+          <span className="flex items-center gap-1.5 text-primary font-medium">
+            <AppIcon name="download" className="w-4 h-4 text-secondary" />
             Instant One-Click Ready
           </span>
           <span className="text-[11px] text-slate-400">SHA-256 Hashed</span>

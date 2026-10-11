@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { INITIAL_DOSSIERS } from './dossierData';
+import { askCase } from '../../services/api';
+import AppIcon from '../common/AppIcon';
 
 export function AskAiDrawer({ isOpen, onClose, selectedCase, initialTab = 'chat' }) {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [activeCaseSelection, setActiveCaseSelection] = useState(selectedCase?.id || 'all');
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
+  useEffect(() => {
+    if (selectedCase?.id) {
+      setActiveCaseSelection(selectedCase.id);
+    }
+  }, [selectedCase?.id]);
   
   // Chat state
   const [query, setQuery] = useState('');
@@ -139,7 +151,7 @@ export function AskAiDrawer({ isOpen, onClose, selectedCase, initialTab = 'chat'
   });
 
   // SEND CHAT MESSAGE
-  const handleSend = (e) => {
+  const handleSend = async (e) => {
     if (e) e.preventDefault();
     if (!query.trim()) return;
 
@@ -155,6 +167,29 @@ export function AskAiDrawer({ isOpen, onClose, selectedCase, initialTab = 'chat'
     ]);
     setIsTyping(true);
 
+    // ── 1. Try real backend grounded Q&A when a case is selected ──────────
+    const activeCaseId = currentCase?.id;
+    if (activeCaseId && activeCaseId !== 'all') {
+      try {
+        const result = await askCase(activeCaseId, userText);
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: 'ai',
+            text: result.answer,
+            citation: `Grounded in ${currentCase.title || currentCase.case_number || activeCaseId}`,
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          },
+        ]);
+        setIsTyping(false);
+        return;
+      } catch (err) {
+        // Backend unreachable – fall through to keyword simulation
+        console.warn('Nyaya AI backend unavailable, using offline simulation:', err.message);
+      }
+    }
+
+    // ── 2. Offline keyword simulation fallback ─────────────────────────────
     setTimeout(() => {
       let reply = '';
       let citation = '';
@@ -341,7 +376,7 @@ Advocate for Claimant`;
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-secondary to-amber-300 text-primary flex items-center justify-center font-bold shadow-md">
-              <span className="material-symbols-outlined text-[22px]">smart_toy</span>
+              <AppIcon name="smart_toy" className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -360,10 +395,10 @@ Advocate for Claimant`;
 
           <button
             onClick={onClose}
-            className="text-slate-300 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition"
+            className="text-slate-300 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition cursor-pointer"
             title="Close Nyaya AI"
           >
-            <span className="material-symbols-outlined text-[22px]">close</span>
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -379,13 +414,13 @@ Advocate for Claimant`;
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition shrink-0 ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition shrink-0 cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-secondary text-primary font-bold shadow-xs'
                   : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
-              <span className="material-symbols-outlined text-[16px]">{tab.icon}</span>
+              <AppIcon name={tab.icon} className="w-4 h-4" />
               {tab.label}
             </button>
           ))}
@@ -452,16 +487,16 @@ Advocate for Claimant`;
                     <p>{m.text}</p>
                     {m.citation && (
                       <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-secondary font-mono font-semibold">
-                        <span className="flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[13px]">verified</span>
+                        <span className="flex items-center gap-1.5">
+                          <AppIcon name="verified" className="w-3.5 h-3.5 text-secondary" />
                           Citation: {m.citation}
                         </span>
                         <button
                           onClick={() => copyToClipboard(m.text)}
-                          className="hover:text-primary transition flex items-center gap-0.5"
+                          className="hover:text-primary transition flex items-center gap-0.5 cursor-pointer"
                           title="Copy text"
                         >
-                          <span className="material-symbols-outlined text-[12px]">content_copy</span>
+                          <AppIcon name="content_copy" className="w-3 h-3 text-slate-500" />
                         </button>
                       </div>
                     )}
@@ -485,7 +520,7 @@ Advocate for Claimant`;
                 onClick={() => {
                   setQuery('What is the mandatory Section 498A arrest checklist in Arnesh Kumar?');
                 }}
-                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0"
+                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0 cursor-pointer"
               >
                 Sec 498A Checklist
               </button>
@@ -493,7 +528,7 @@ Advocate for Claimant`;
                 onClick={() => {
                   setQuery('Where to file a Section 138 cheque bounce case under 2015 amendment?');
                 }}
-                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0"
+                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0 cursor-pointer"
               >
                 Sec 138 Jurisdiction
               </button>
@@ -501,7 +536,7 @@ Advocate for Claimant`;
                 onClick={() => {
                   setQuery('Explain the 3-part test for Right to Privacy under Article 21');
                 }}
-                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0"
+                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0 cursor-pointer"
               >
                 Article 21 Privacy
               </button>
@@ -509,7 +544,7 @@ Advocate for Claimant`;
                 onClick={() => {
                   setQuery('What is the 4-fold test of non-arbitrability in Vidya Drolia?');
                 }}
-                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0"
+                className="px-2.5 py-1 rounded bg-white border border-slate-300 text-slate-700 hover:border-secondary hover:text-primary transition shrink-0 cursor-pointer"
               >
                 Arbitrability Test
               </button>
@@ -526,9 +561,9 @@ Advocate for Claimant`;
               />
               <button
                 type="submit"
-                className="px-4 py-2.5 rounded-lg bg-secondary text-primary font-bold text-xs hover:bg-[#d6b46b] transition flex items-center gap-1 active:scale-95 shadow-sm"
+                className="px-4 py-2.5 rounded-lg bg-secondary text-primary font-bold text-xs hover:bg-[#d6b46b] transition flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[16px]">send</span>
+                <AppIcon name="send" className="w-4 h-4" />
                 Send
               </button>
             </form>
@@ -556,9 +591,7 @@ Advocate for Claimant`;
                   placeholder="Search section number (e.g. 498A, 138, 41A, 21) or keyword..."
                   className="w-full text-xs pl-8 pr-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-secondary bg-white"
                 />
-                <span className="material-symbols-outlined absolute left-2.5 top-2 text-[16px] text-slate-400">
-                  search
-                </span>
+                <AppIcon name="search" className="absolute left-2.5 top-2.5 w-4 h-4 text-slate-400" />
               </div>
 
               <select
@@ -608,8 +641,8 @@ Advocate for Claimant`;
                   </div>
 
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-secondary font-medium">
-                    <span className="flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">gavel</span>
+                    <span className="flex items-center gap-1.5">
+                      <AppIcon name="gavel" className="w-3.5 h-3.5 text-secondary" />
                       Precedent: {st.landmarkCase}
                     </span>
                     <button
@@ -617,7 +650,7 @@ Advocate for Claimant`;
                         setActiveTab('chat');
                         setQuery(`Explain ${st.section} in detail citing ${st.landmarkCase}`);
                       }}
-                      className="text-primary hover:text-secondary font-semibold hover:underline"
+                      className="text-primary hover:text-secondary font-semibold hover:underline cursor-pointer"
                     >
                       Ask AI &rarr;
                     </button>
@@ -722,16 +755,16 @@ Advocate for Claimant`;
               <button
                 type="submit"
                 disabled={isDrafting}
-                className="w-full py-2 bg-secondary text-primary font-bold rounded-lg hover:bg-[#d6b46b] transition flex items-center justify-center gap-1.5 active:scale-95"
+                className="w-full py-2 bg-secondary text-primary font-bold rounded-lg hover:bg-[#d6b46b] transition flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer"
               >
                 {isDrafting ? (
                   <>
-                    <span className="material-symbols-outlined animate-spin text-[16px]">cached</span>
+                    <AppIcon name="cached" className="w-4 h-4 animate-spin" />
                     Generating Formal Legal Notice...
                   </>
                 ) : (
                   <>
-                    <span className="material-symbols-outlined text-[16px]">auto_fix_high</span>
+                    <AppIcon name="auto_fix_high" className="w-4 h-4" />
                     Generate Statutory Notice Draft
                   </>
                 )}
@@ -741,16 +774,16 @@ Advocate for Claimant`;
             {generatedNotice && (
               <div className="bg-white p-4 rounded-lg border border-secondary/40 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-headline font-bold text-xs text-primary flex items-center gap-1">
-                    <span className="material-symbols-outlined text-secondary text-[16px]">verified</span>
+                  <span className="font-headline font-bold text-xs text-primary flex items-center gap-1.5">
+                    <AppIcon name="verified" className="w-4 h-4 text-secondary" />
                     Generated Statutory Notice
                   </span>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => copyToClipboard(generatedNotice)}
-                      className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-primary text-xs font-semibold flex items-center gap-1"
+                      className="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-primary text-xs font-semibold flex items-center gap-1 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[14px]">content_copy</span>
+                      <AppIcon name="content_copy" className="w-3.5 h-3.5" />
                       {copyFeedback ? 'Copied!' : 'Copy Notice'}
                     </button>
                     <button
@@ -762,9 +795,9 @@ Advocate for Claimant`;
                         a.download = `Statutory_Notice_${Date.now()}.txt`;
                         a.click();
                       }}
-                      className="px-2.5 py-1 rounded bg-secondary text-primary text-xs font-bold flex items-center gap-1 hover:bg-[#d6b46b]"
+                      className="px-2.5 py-1 rounded bg-secondary text-primary text-xs font-bold flex items-center gap-1 hover:bg-[#d6b46b] cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[14px]">download</span>
+                      <AppIcon name="download" className="w-3.5 h-3.5" />
                       Download
                     </button>
                   </div>
@@ -816,16 +849,16 @@ Advocate for Claimant`;
                   type="button"
                   disabled={isSynthesizing}
                   onClick={handleSynthesize}
-                  className="px-4 py-2 bg-secondary text-primary font-bold rounded-lg hover:bg-[#d6b46b] text-xs flex items-center gap-1.5 active:scale-95 shadow-sm"
+                  className="px-4 py-2 bg-secondary text-primary font-bold rounded-lg hover:bg-[#d6b46b] text-xs flex items-center gap-1.5 active:scale-95 shadow-sm cursor-pointer"
                 >
                   {isSynthesizing ? (
                     <>
-                      <span className="material-symbols-outlined animate-spin text-[16px]">cached</span>
+                      <AppIcon name="cached" className="w-4 h-4 animate-spin" />
                       Synthesizing Ratio...
                     </>
                   ) : (
                     <>
-                      <span className="material-symbols-outlined text-[16px]">psychology</span>
+                      <AppIcon name="psychology" className="w-4 h-4" />
                       Synthesize Headnote
                     </>
                   )}
@@ -911,8 +944,8 @@ Advocate for Claimant`;
             {verificationResult && (
               <div className="bg-white p-4 rounded-lg border border-emerald-500/40 shadow-sm space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-emerald-700 font-headline font-bold text-xs">
-                    <span className="material-symbols-outlined text-[18px]">verified</span>
+                  <div className="flex items-center gap-1.5 text-emerald-700 font-headline font-bold text-xs">
+                    <AppIcon name="verified" className="w-4 h-4 text-emerald-600" />
                     STATUS: {verificationResult.status}
                   </div>
                   <span className="text-[10px] bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded font-mono font-bold border border-emerald-200">

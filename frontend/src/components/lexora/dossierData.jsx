@@ -1,4 +1,5 @@
 import React from 'react';
+import AppIcon from '../common/AppIcon';
 
 export const INITIAL_DOSSIERS = [
   {
@@ -14,7 +15,7 @@ export const INITIAL_DOSSIERS = [
     disposition: 'ALLOWED - ARREST SAFEGUARDS MANDATED',
     statusBadge: (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-secondary-container text-on-secondary-container border border-secondary/40 shadow-2xs">
-        <span className="material-symbols-outlined text-[12px] text-secondary">verified</span> Certified Copy Ready
+        <AppIcon name="verified" className="w-3 h-3 text-secondary" /> Certified Copy Ready
       </span>
     ),
     tabCategory: 'certified',
@@ -65,7 +66,7 @@ export const INITIAL_DOSSIERS = [
     disposition: 'ALLOWED - PRIVACY AFFIRMED',
     statusBadge: (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-primary text-on-primary border border-secondary shadow-2xs">
-        <span className="material-symbols-outlined text-[12px] text-secondary">shield</span> Disposed / Allowed
+        <AppIcon name="shield" className="w-3 h-3 text-secondary" /> Disposed / Allowed
       </span>
     ),
     tabCategory: 'certified',
@@ -116,7 +117,7 @@ export const INITIAL_DOSSIERS = [
     disposition: 'PENDING HEARING',
     statusBadge: (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200">
-        <span className="material-symbols-outlined text-[12px]">pending</span> Trial In-Progress
+        <AppIcon name="pending" className="w-3 h-3 text-amber-700" /> Trial In-Progress
       </span>
     ),
     tabCategory: 'hearing',
@@ -167,7 +168,7 @@ export const INITIAL_DOSSIERS = [
     disposition: 'ORDERS RESERVED',
     statusBadge: (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-[#F9F5EB] text-[#6B5421] border border-secondary/30">
-        <span className="material-symbols-outlined text-[12px] text-secondary">history_edu</span> Drafting Order
+        <AppIcon name="history_edu" className="w-3 h-3 text-secondary" /> Drafting Order
       </span>
     ),
     tabCategory: 'reserved',
@@ -212,7 +213,7 @@ export const INITIAL_DOSSIERS = [
     disposition: 'DECREE DISPATCHED',
     statusBadge: (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-secondary-container text-on-secondary-container border border-secondary/40 shadow-2xs">
-        <span className="material-symbols-outlined text-[12px] text-secondary">verified</span> Certified Copy Ready
+        <AppIcon name="verified" className="w-3 h-3 text-secondary" /> Certified Copy Ready
       </span>
     ),
     tabCategory: 'certified',

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import AppIcon from '../common/AppIcon';
 
 export function NewDocketModal({ isOpen, onClose, onAddCase }) {
   const [caseTitle, setCaseTitle] = useState('');
@@ -78,7 +79,7 @@ export function NewDocketModal({ isOpen, onClose, onAddCase }) {
         disposition: 'CERTIFIED DOCKET RECORDED',
         statusBadge: (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-secondary-container text-on-secondary-container border border-secondary/40 shadow-2xs">
-            <span className="material-symbols-outlined text-[12px] text-secondary">verified</span> Certified Copy Ready
+            <AppIcon name="verified" className="w-3 h-3 text-secondary" /> Certified Copy Ready
           </span>
         ),
         tabCategory: 'certified',
@@ -117,7 +118,7 @@ export function NewDocketModal({ isOpen, onClose, onAddCase }) {
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-lg w-full overflow-hidden animate-in zoom-in-95 duration-200">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-secondary text-[22px]">post_add</span>
+            <AppIcon name="post_add" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-base text-white">
               File New Judicial Docket
             </h3>
@@ -126,7 +127,7 @@ export function NewDocketModal({ isOpen, onClose, onAddCase }) {
             onClick={onClose}
             className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/10 transition cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[20px]">close</span>
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -158,13 +159,12 @@ export function NewDocketModal({ isOpen, onClose, onAddCase }) {
                 : 'border-outline-variant hover:border-secondary/60 bg-slate-50'
             }`}
           >
-            <span
-              className={`material-symbols-outlined text-[36px] block mx-auto mb-1 ${
+            <AppIcon
+              name={uploadedFileName ? 'task' : 'cloud_upload'}
+              className={`w-9 h-9 mx-auto mb-1 ${
                 uploadedFileName ? 'text-emerald-600' : 'text-secondary'
               }`}
-            >
-              {uploadedFileName ? 'task' : 'cloud_upload'}
-            </span>
+            />
             <p className="font-semibold text-primary">
               {uploadedFileName ? uploadedFileName : 'Upload Judgment PDF or Decree Scan'}
             </p>
@@ -251,12 +251,12 @@ export function NewDocketModal({ isOpen, onClose, onAddCase }) {
             >
               {isUploading ? (
                 <>
-                  <span className="material-symbols-outlined animate-spin text-[16px]">cached</span>
+                  <AppIcon name="cached" className="w-4 h-4 animate-spin" />
                   Ingesting with PyMuPDF...
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-[16px]">add_circle</span>
+                  <AppIcon name="add_circle" className="w-4 h-4" />
                   Create Docket Entry
                 </>
               )}
@@ -267,3 +267,5 @@ export function NewDocketModal({ isOpen, onClose, onAddCase }) {
     </div>
   );
 }
+
+export default NewDocketModal;

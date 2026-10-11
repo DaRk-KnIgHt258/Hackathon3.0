@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { UploadCloud, FileCheck, X, Sparkles, Loader2, AlertCircle, FileText, CheckCircle2 } from 'lucide-react';
 import { normalizeCase } from '../mock/mockCaseData';
+import { analyzeDocument } from '../services/api';
 
 export function UploadZone({ isOpen, onClose, onUploadSuccess }) {
   const [dragActive, setDragActive] = useState(false);
@@ -65,43 +66,31 @@ export function UploadZone({ isOpen, onClose, onUploadSuccess }) {
 
     // Try calling live backend first
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
       setUploadStep('Running PyMuPDF sub-100ms parser...');
 
-      const response = await fetch('http://localhost:8000/api/document/analyze', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          // fetch automatically sets multipart boundary
-        }
-      });
+      const data = await analyzeDocument(file);
 
-      if (response.ok) {
-        setUploadStep('Gemini Flash extracting statutory clauses & ratio...');
-        const data = await response.json();
-        const normalized = normalizeCase({
-          id: data.case_id,
-          ...data.dossier,
-          pages: [
-            {
-              pageNumber: 1,
-              header: `IN THE ${data.dossier.court?.toUpperCase() || 'COURT'}`,
-              paragraphs: [
-                { num: 1, text: data.dossier.lawyer_headnote, highlight: true, tag: 'Ratio Decidendi' },
-                { num: 2, text: data.dossier.verdict_summary, highlight: false }
-              ]
-            }
-          ]
-        });
-        setUploading(false);
-        onUploadSuccess(normalized);
-        onClose();
-        return;
-      }
+      setUploadStep('Gemini Flash extracting statutory clauses & ratio...');
+      const normalized = normalizeCase({
+        id: data.case_id,
+        ...data.dossier,
+        pages: [
+          {
+            pageNumber: 1,
+            header: `IN THE ${data.dossier.court?.toUpperCase() || 'COURT'}`,
+            paragraphs: [
+              { num: 1, text: data.dossier.lawyer_headnote, highlight: true, tag: 'Ratio Decidendi' },
+              { num: 2, text: data.dossier.verdict_summary, highlight: false }
+            ]
+          }
+        ]
+      });
+      setUploading(false);
+      onUploadSuccess(normalized);
+      onClose();
+      return;
     } catch (err) {
-      // Backend not running on localhost:8000 – fall back to client AI synthesis
+      // Backend not running – fall back to client-side AI synthesis
       console.log('FastAPI server offline or unreachable, using client-side triage engine:', err);
     }
 

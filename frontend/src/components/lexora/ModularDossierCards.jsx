@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import AppIcon from '../common/AppIcon';
 
 export function ModularDossierCards({
   dossiers = [],
@@ -88,7 +89,7 @@ export function ModularDossierCards({
                 <div>
                   <div className="text-xs font-medium text-slate-800">{card.stageTitle}</div>
                   <span className={`text-[11px] flex items-center gap-1 mt-0.5 ${card.stageSubClass}`}>
-                    <span className="material-symbols-outlined text-[13px]">{card.stageIcon}</span>
+                    <AppIcon name={card.stageIcon} className="w-3.5 h-3.5" />
                     {card.stageSub}
                   </span>
                 </div>
@@ -112,19 +113,19 @@ export function ModularDossierCards({
                       onSelectDossier && onSelectDossier(card);
                     }
                   }}
-                  className={`px-3 py-1.5 rounded font-semibold text-xs flex items-center gap-1 shadow-2xs transition active:scale-95 cursor-pointer ${card.actionBtnClass}`}
+                  className={`px-3 py-1.5 rounded font-semibold text-xs flex items-center gap-1.5 shadow-2xs transition active:scale-95 cursor-pointer ${card.actionBtnClass}`}
                 >
-                  <span className="material-symbols-outlined text-[14px]">{card.actionIcon}</span>
+                  <AppIcon name={card.actionIcon} className="w-3.5 h-3.5" />
                   {card.actionLabel}
                 </button>
 
                 {/* Direct Ask Nyaya AI button */}
                 <button
                   onClick={() => onAskAi && onAskAi(card)}
-                  className="px-2.5 py-1.5 rounded bg-white hover:bg-secondary/15 text-primary hover:text-secondary border border-outline-variant font-semibold text-xs flex items-center gap-1 transition active:scale-95 cursor-pointer"
+                  className="px-2.5 py-1.5 rounded bg-white hover:bg-secondary/15 text-primary hover:text-secondary border border-outline-variant font-semibold text-xs flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
                   title="Ask Nyaya AI about this Case"
                 >
-                  <span className="material-symbols-outlined text-[14px] text-secondary">smart_toy</span>
+                  <AppIcon name="smart_toy" className="w-3.5 h-3.5 text-secondary" />
                   <span>AI Q&A</span>
                 </button>
               </div>
@@ -139,7 +140,7 @@ export function ModularDossierCards({
                   className="p-1 rounded text-slate-400 hover:text-primary hover:bg-slate-200/60 transition cursor-pointer"
                   title="More Options"
                 >
-                  <span className="material-symbols-outlined text-[18px]">more_vert</span>
+                  <AppIcon name="more_vert" className="w-4 h-4" />
                 </button>
 
                 {/* Dropdown Menu */}
@@ -150,9 +151,9 @@ export function ModularDossierCards({
                         setActiveMenuId(null);
                         onSelectDossier(card);
                       }}
-                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2"
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[15px] text-primary">visibility</span>
+                      <AppIcon name="visibility" className="w-3.5 h-3.5 text-primary" />
                       View Case Dossier
                     </button>
                     <button
@@ -160,9 +161,9 @@ export function ModularDossierCards({
                         setActiveMenuId(null);
                         onAskAi && onAskAi(card);
                       }}
-                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 text-primary font-medium"
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 text-primary font-medium cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[15px] text-secondary">smart_toy</span>
+                      <AppIcon name="smart_toy" className="w-3.5 h-3.5 text-secondary" />
                       Ask Nyaya AI
                     </button>
                     <button
@@ -170,9 +171,9 @@ export function ModularDossierCards({
                         setActiveMenuId(null);
                         onDownloadPdf && onDownloadPdf(card);
                       }}
-                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2"
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[15px] text-emerald-600">download</span>
+                      <AppIcon name="download" className="w-3.5 h-3.5 text-emerald-600" />
                       Download Certified PDF
                     </button>
                     <button
@@ -180,9 +181,9 @@ export function ModularDossierCards({
                         setActiveMenuId(null);
                         navigator.clipboard.writeText(`${card.title} - ${card.citation} (${card.cnr})`);
                       }}
-                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2"
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[15px] text-slate-500">content_copy</span>
+                      <AppIcon name="content_copy" className="w-3.5 h-3.5 text-slate-500" />
                       Copy Citation
                     </button>
                   </div>
@@ -199,7 +200,7 @@ export function ModularDossierCards({
         <div>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-secondary text-primary flex items-center justify-center shrink-0 shadow-md">
-              <span className="material-symbols-outlined fill-icon text-[24px]">verified</span>
+              <AppIcon name="verified" className="w-6 h-6 text-primary" />
             </div>
             <div>
               <span className="text-[10px] uppercase font-mono tracking-wider text-secondary font-semibold">
@@ -219,7 +220,7 @@ export function ModularDossierCards({
             onClick={() => onRequestSeal && onRequestSeal()}
             className="px-3 py-1.5 rounded bg-secondary hover:bg-[#d6b46b] text-primary text-xs font-bold font-label transition shadow-sm flex items-center gap-1.5 active:scale-95 cursor-pointer"
           >
-            <span className="material-symbols-outlined text-[16px]">how_to_reg</span>
+            <AppIcon name="how_to_reg" className="w-4 h-4 text-primary" />
             Request Seal Verification
           </button>
           <button
@@ -233,3 +234,5 @@ export function ModularDossierCards({
     </div>
   );
 }
+
+export default ModularDossierCards;

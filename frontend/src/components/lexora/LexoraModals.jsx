@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AppIcon from '../common/AppIcon';
 
 // 1. ADVANCED SEARCH FILTER MODAL
 export function AdvancedSearchModal({ isOpen, onClose, onApplyFilters, onResetFilters }) {
@@ -31,11 +32,11 @@ export function AdvancedSearchModal({ isOpen, onClose, onApplyFilters, onResetFi
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-lg w-full overflow-hidden">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[22px]">tune</span>
+            <AppIcon name="tune" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-base text-white">Advanced Docket Filters</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -189,18 +190,18 @@ export function NotificationsFlyout({ isOpen, onClose, onSelectAlert }) {
       <div className="w-full max-w-sm bg-surface border-l border-outline-variant shadow-2xl flex flex-col h-full animate-in slide-in-from-right duration-200">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[20px]">notifications</span>
+            <AppIcon name="notifications" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-sm text-white">Docket Alerts & Notices</h3>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={markAllRead}
-              className="text-[11px] text-secondary hover:underline font-label font-medium"
+              className="text-[11px] text-secondary hover:underline font-label font-medium cursor-pointer"
             >
               Mark all read
             </button>
-            <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
-              <span className="material-symbols-outlined text-[18px]">close</span>
+            <button onClick={onClose} className="text-slate-400 hover:text-white p-1 cursor-pointer">
+              <AppIcon name="close" className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -217,9 +218,7 @@ export function NotificationsFlyout({ isOpen, onClose, onSelectAlert }) {
               }`}
             >
               <div className="flex items-start gap-2.5">
-                <span className="material-symbols-outlined text-[18px] text-secondary shrink-0 mt-0.5">
-                  {alert.icon}
-                </span>
+                <AppIcon name={alert.icon} className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <h5 className="font-headline font-bold text-xs text-primary leading-tight">
@@ -263,17 +262,17 @@ export function SupportDeskModal({ isOpen, onClose }) {
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-lg w-full overflow-hidden">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[22px]">help_outline</span>
+            <AppIcon name="help_outline" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-base text-white">Registry & e-Filing Support Desk</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-5 space-y-4 text-xs font-body text-on-surface">
           <div className="p-3 bg-secondary-container text-on-secondary-container rounded-lg border border-secondary/30 flex items-center gap-2.5">
-            <span className="material-symbols-outlined text-secondary text-[20px]">support_agent</span>
+            <AppIcon name="support_agent" className="w-5 h-5 text-secondary shrink-0" />
             <div>
               <span className="font-bold block font-headline">Supreme Court CIS Helpdesk: Operational</span>
               <span className="text-[11px]">Direct Line: +91 11 23388942 • appellate-support@sci.nic.in</span>
@@ -356,8 +355,8 @@ export function CounselProfileModal({ isOpen, onClose }) {
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -369,8 +368,8 @@ export function CounselProfileModal({ isOpen, onClose }) {
             </div>
             <div className="p-2.5 rounded bg-slate-50 border border-slate-200">
               <span className="text-[10px] text-slate-400 font-semibold uppercase block">DigiSeal Cert</span>
-              <strong className="text-emerald-700 text-xs font-mono flex items-center gap-1">
-                <span className="material-symbols-outlined text-[13px]">verified</span> Active (Class 3)
+              <strong className="text-emerald-700 text-xs font-mono flex items-center gap-1.5">
+                <AppIcon name="verified" className="w-3.5 h-3.5 text-emerald-600" /> Active (Class 3)
               </strong>
             </div>
           </div>
@@ -378,16 +377,16 @@ export function CounselProfileModal({ isOpen, onClose }) {
           <div className="space-y-1.5">
             <span className="font-bold text-primary block">Enrolled Jurisdictions:</span>
             <ul className="space-y-1 text-slate-600">
-              <li className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-secondary text-[14px]">balance</span>
+              <li className="flex items-center gap-2">
+                <AppIcon name="balance" className="w-3.5 h-3.5 text-secondary" />
                 Supreme Court of India (Appellate & Writ Jurisdiction)
               </li>
-              <li className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-secondary text-[14px]">domain</span>
+              <li className="flex items-center gap-2">
+                <AppIcon name="domain" className="w-3.5 h-3.5 text-secondary" />
                 High Court of Delhi & High Court of Judicature at Bombay
               </li>
-              <li className="flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-secondary text-[14px]">account_balance</span>
+              <li className="flex items-center gap-2">
+                <AppIcon name="account_balance" className="w-3.5 h-3.5 text-secondary" />
                 National Company Law Appellate Tribunal (NCLAT)
               </li>
             </ul>
@@ -424,13 +423,13 @@ export function GazetteModal({ isOpen, onClose }) {
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-xl w-full overflow-hidden">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[22px]">campaign</span>
+            <AppIcon name="campaign" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-base text-white">
               Supreme Court Official Roster Notification
             </h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -456,8 +455,8 @@ export function GazetteModal({ isOpen, onClose }) {
           </div>
 
           <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
-            <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-              <span className="material-symbols-outlined text-[15px]">verified</span>
+            <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1.5">
+              <AppIcon name="verified" className="w-4 h-4 text-emerald-600" />
               Gazette Electronic Signature Attested
             </span>
             <button
@@ -482,17 +481,18 @@ export function NoticeTimelineModal({ isOpen, onClose, noticeAction, noticeId })
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-lg w-full overflow-hidden">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[22px]">
-              {noticeAction === 'track' ? 'local_shipping' : 'receipt_long'}
-            </span>
+            <AppIcon
+              name={noticeAction === 'track' ? 'local_shipping' : 'receipt_long'}
+              className="w-5 h-5 text-secondary"
+            />
             <h3 className="font-headline font-bold text-base text-white">
               {noticeAction === 'track'
                 ? `India Post Tracking: ${noticeId || '#ED81249'}`
                 : `Proof of Delivery (POD) Slip: ${noticeId || '#LN-2025-0842'}`}
             </h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -557,11 +557,11 @@ export function DeskGuidelinesModal({ isOpen, onClose }) {
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-lg w-full overflow-hidden">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[22px]">menu_book</span>
+            <AppIcon name="menu_book" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-base text-white">Fast-Track Registry Seal Guidelines</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
@@ -616,20 +616,18 @@ export function BatchCnrModal({ isOpen, onClose }) {
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-md w-full overflow-hidden">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[22px]">sync</span>
+            <AppIcon name="sync" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-base text-white">Batch CNR Synchronizer</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 
         <div className="p-5 space-y-4 text-xs font-body text-slate-800">
           {checking ? (
             <div className="py-6 flex flex-col items-center justify-center space-y-3">
-              <span className="material-symbols-outlined text-[36px] text-secondary animate-spin">
-                autorenew
-              </span>
+              <AppIcon name="autorenew" className="w-9 h-9 text-secondary animate-spin" />
               <span className="font-bold text-primary">Interrogating CIS e-Court Nodes...</span>
               <div className="w-48 h-1.5 bg-slate-200 rounded-full overflow-hidden">
                 <div className="h-full bg-secondary animate-pulse w-3/4"></div>
@@ -639,7 +637,7 @@ export function BatchCnrModal({ isOpen, onClose }) {
           ) : (
             <div className="space-y-3 animate-in fade-in">
               <div className="p-3 bg-emerald-50 rounded border border-emerald-200 text-emerald-900 flex items-center gap-2 font-semibold">
-                <span className="material-symbols-outlined text-emerald-600">verified</span>
+                <AppIcon name="verified" className="w-4 h-4 text-emerald-600" />
                 All 1,248 Dockets Synchronized with Supreme Court Registry
               </div>
               <div className="space-y-1.5 text-slate-600 font-mono text-[11px]">
@@ -709,11 +707,11 @@ export function InstitutionalInfoModal({ isOpen, onClose, topic }) {
       <div className="bg-surface rounded-xl border border-outline-variant shadow-2xl max-w-md w-full overflow-hidden">
         <div className="p-4 bg-primary text-white flex items-center justify-between border-b border-outline/30">
           <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary text-[22px]">policy</span>
+            <AppIcon name="policy" className="w-5 h-5 text-secondary" />
             <h3 className="font-headline font-bold text-base text-white">{current.title}</h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg">
-            <span className="material-symbols-outlined text-[20px]">close</span>
+          <button onClick={onClose} className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer">
+            <AppIcon name="close" className="w-5 h-5" />
           </button>
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TopAppBar } from './components/lexora/TopAppBar';
 import { SubHeaderBanner } from './components/lexora/SubHeaderBanner';
 import { KpiStrip } from './components/lexora/KpiStrip';
@@ -22,6 +22,106 @@ import {
 } from './components/lexora/LexoraModals';
 import { UploadZone } from './components/UploadZone';
 import { INITIAL_DOSSIERS } from './components/lexora/dossierData';
+import { fetchCases, fetchSampleCases, fetchCase } from './services/api';
+import { normalizeCase, MOCK_CASES } from './mock/mockCaseData';
+import AppIcon from './components/common/AppIcon';
+
+/**
+ * Maps a backend CaseListItem or SampleCase to the dossier card grid shape
+ * expected by ModularDossierCards (statutes, cnr, citation, stage*, etc.).
+ */
+function normalizeToDossierCard(c) {
+  const caseId = c.id || c.case_id || '';
+  const benchmark = MOCK_CASES.find(
+    (m) =>
+      m.id === caseId ||
+      (m.title && c.title && (
+        m.title.toLowerCase().includes(c.title.toLowerCase().slice(0, 15)) ||
+        c.title.toLowerCase().includes(m.title.toLowerCase().slice(0, 15))
+      ))
+  );
+
+  const title = c.title || benchmark?.title || 'Court Judgment Order';
+  const parts = title.split(/\s+(?:vs\.?|v\.?)\s+/i);
+  const petitioner =
+    c.petitioner || (parts.length > 1 ? parts[0].trim() : (benchmark?.petitioner || 'Petitioner'));
+  const respondent =
+    c.respondent || (parts.length > 1 ? parts[1].trim() : (benchmark?.respondent || 'Respondent'));
+
+  const headnote =
+    c.lawyer_headnote || c.headnote || benchmark?.lawyer_headnote || c.description || '';
+  const citizenSummaryEn =
+    c.citizen_summary_en || c.citizenSummaryEn || benchmark?.citizen_summary_en || c.description || '';
+  const citizenSummaryHi =
+    c.citizen_summary_hi || c.citizenSummaryHi || benchmark?.citizen_summary_hi || '';
+
+  const statutesCited =
+    Array.isArray(c.statutes_cited) && c.statutes_cited.length > 0
+      ? c.statutes_cited
+      : benchmark?.statutes_cited || [];
+
+  const rawDisp =
+    c.disposition_status ||
+    (typeof c.disposition === 'string' ? c.disposition : c.disposition?.status) ||
+    benchmark?.disposition?.status ||
+    'ALLOWED';
+  const isFavourable = ['ALLOWED', 'BAIL_GRANTED'].some((k) => rawDisp.includes(k));
+  const isPending = ['REMANDED', 'DISPOSED_WITH_DIRECTIONS', 'PARTLY_ALLOWED', 'RESERVED'].some((k) =>
+    rawDisp.includes(k)
+  );
+
+  const statutes = statutesCited.map((s) => ({
+    name: s.section || s.act || 'Statute',
+    badgeClass: 'bg-slate-100 text-slate-700 border-slate-200',
+  }));
+
+  const caseNum =
+    c.case_number ||
+    c.appealNumber ||
+    benchmark?.case_number ||
+    (caseId && !caseId.startsWith('sample_')
+      ? `Case #${caseId.slice(0, 8).toUpperCase()}`
+      : 'Criminal Appeal No. 1277/2014');
+
+  return {
+    id: caseId || benchmark?.id || 'dossier_' + Date.now(),
+    cnr: caseNum,
+    title,
+    citation: c.citation || benchmark?.citation || `(${c.judgment_date || c.year || benchmark?.date || '2024'})`,
+    appealNumber: caseNum,
+    diaryNumber: c.diaryNumber || `Diary # ${Math.floor(10000 + Math.random() * 80000)}/2024`,
+    court: c.court || benchmark?.court || 'Supreme Court of India',
+    coram: Array.isArray(c.coram) ? c.coram.join('; ') : (c.coram || benchmark?.coram?.join('; ') || "Hon'ble Bench"),
+    benchType: c.case_type || benchmark?.case_type || 'Appellate Bench',
+    disposition: rawDisp,
+    statusBadge: null,
+    tabCategory: isFavourable ? 'certified' : isPending ? 'reserved' : 'hearing',
+    statutes,
+    stageTitle: isFavourable ? 'Final Order Issued' : isPending ? 'Orders Reserved' : 'Listed for Hearing',
+    stageSub: isFavourable ? 'Disposed on Merits' : isPending ? 'Judgment Awaited' : 'Next Date Assigned',
+    stageSubClass: isFavourable
+      ? 'text-emerald-700 font-medium'
+      : isPending
+      ? 'text-amber-700 font-medium'
+      : 'text-sky-700 font-medium',
+    stageIcon: isFavourable ? 'check_circle' : isPending ? 'hourglass_top' : 'gavel',
+    registrySealTag: `DigiSeal # ${(caseId || 'SC-2024').slice(0, 12).toUpperCase()}`,
+    actionLabel: 'View Dossier',
+    actionIcon: 'open_in_new',
+    actionType: 'view',
+    actionBtnClass: 'bg-secondary text-primary hover:bg-[#d6b46b]',
+    headnote,
+    citizenSummaryEn,
+    citizenSummaryHi,
+    citizenSummaryMr: c.citizenSummaryMr || '',
+    petitioner,
+    respondent,
+    statuteDetails: statutesCited.map((s) => ({ section: s.section, act: s.act, desc: s.description || '' })),
+    precedents_cited: c.precedents_cited || benchmark?.precedents_cited || [],
+    key_facts: c.key_facts || benchmark?.key_facts || [],
+    pages: c.pages || benchmark?.pages,
+  };
+}
 
 export function App() {
   const [dossiers, setDossiers] = useState(INITIAL_DOSSIERS);
@@ -51,6 +151,71 @@ export function App() {
 
   // Toast feedback
   const [toastMessage, setToastMessage] = useState(null);
+  const [backendOnline, setBackendOnline] = useState(false);
+
+  // ── Bootstrap: hydrate dossiers from backend on mount ──────────────────
+  useEffect(() => {
+    let cancelled = false;
+
+    async function bootstrap() {
+      try {
+        // Fetch in parallel: processed cases list + landmark samples
+        const [casesResp, samplesResp] = await Promise.all([
+          fetchCases({ limit: 50 }),
+          fetchSampleCases(),
+        ]);
+
+        if (cancelled) return;
+        setBackendOnline(true);
+
+        // Deduplicate against existing IDs and case titles
+        const existingIds = new Set(INITIAL_DOSSIERS.map((d) => d.id));
+        const existingTitles = new Set(
+          INITIAL_DOSSIERS.map((d) =>
+            d.title.toLowerCase().split(/\s+(?:vs\.?|v\.?)\s+/i)[0].trim()
+          )
+        );
+
+        // Normalize case list items into dossier card shape
+        const fromCases = (casesResp.cases || [])
+          .map((c) => normalizeToDossierCard({ id: c.case_id, ...c }))
+          .filter(
+            (d) =>
+              !existingIds.has(d.id) &&
+              !existingTitles.has(d.title.toLowerCase().split(/\s+(?:vs\.?|v\.?)\s+/i)[0].trim())
+          );
+
+        // Normalize sample cases (hydrated with rich landmark benchmark data)
+        const seenIds = new Set([...existingIds, ...fromCases.map((c) => c.id)]);
+        const seenTitles = new Set([
+          ...existingTitles,
+          ...fromCases.map((d) =>
+            d.title.toLowerCase().split(/\s+(?:vs\.?|v\.?)\s+/i)[0].trim()
+          ),
+        ]);
+
+        const fromSamples = (samplesResp || [])
+          .map((s) => normalizeToDossierCard({ id: s.case_id, ...s }))
+          .filter(
+            (d) =>
+              !seenIds.has(d.id) &&
+              !seenTitles.has(d.title.toLowerCase().split(/\s+(?:vs\.?|v\.?)\s+/i)[0].trim())
+          );
+
+        const backendDossiers = [...fromSamples, ...fromCases];
+        if (backendDossiers.length > 0) {
+          setDossiers((prev) => [...prev, ...backendDossiers]);
+        }
+      } catch (err) {
+        // Backend offline – stay on static mock data
+        console.info('Backend not reachable on startup, using static mock dossiers:', err.message);
+      }
+    }
+    bootstrap();
+    return () => { cancelled = true; };
+  }, []);
+  // ───────────────────────────────────────────────────────────────────────
+
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -60,18 +225,52 @@ export function App() {
   };
 
   // Open Nyaya AI on specific tab
-  const handleOpenAi = (tab = 'chat', targetDossier = null) => {
+  const handleOpenAi = async (tab = 'chat', targetDossier = null) => {
     if (targetDossier) {
       setSelectedDossier(targetDossier);
+      if (targetDossier.id && (!targetDossier.headnote || !targetDossier.statutes?.length)) {
+        try {
+          const res = await fetchCase(targetDossier.id);
+          if (res?.dossier) {
+            const enriched = {
+              ...targetDossier,
+              ...normalizeToDossierCard({ id: res.case_id, ...res.dossier }),
+            };
+            setSelectedDossier(enriched);
+            setDossiers((prev) =>
+              prev.map((d) => (d.id === targetDossier.id ? enriched : d))
+            );
+          }
+        } catch (_) {}
+      }
     }
     setChatDrawerInitialTab(tab);
     setIsChatDrawerOpen(true);
   };
 
   // Handlers
-  const handleSelectDossier = (dossier) => {
+  const handleSelectDossier = async (dossier) => {
     setSelectedDossier(dossier);
     setIsDossierModalOpen(true);
+
+    // If dossier lacks full details (loaded from list/sample stub), fetch full details
+    if (dossier?.id && (!dossier.headnote || !dossier.statutes?.length)) {
+      try {
+        const res = await fetchCase(dossier.id);
+        if (res?.dossier) {
+          const enriched = {
+            ...dossier,
+            ...normalizeToDossierCard({ id: res.case_id, ...res.dossier }),
+          };
+          setSelectedDossier(enriched);
+          setDossiers((prev) =>
+            prev.map((d) => (d.id === dossier.id ? enriched : d))
+          );
+        }
+      } catch (err) {
+        console.debug('Using cached dossier metadata:', err);
+      }
+    }
   };
 
   const handleDownloadPdf = (dossier) => {
@@ -188,17 +387,23 @@ export function App() {
       appealNumber: uploadedCase.case_number,
       diaryNumber: `Diary # ${Math.floor(10000 + Math.random() * 80000)}/2025`,
       court: uploadedCase.court,
-      coram: uploadedCase.coram?.join('; ') || "Hon'ble High Court Bench",
-      benchType: 'High Court Bench',
-      disposition: 'ALLOWED - INJUNCTION ISSUED',
+      coram: Array.isArray(uploadedCase.coram) ? uploadedCase.coram.join('; ') : (uploadedCase.coram || "Hon'ble High Court Bench"),
+      petitioner:
+        uploadedCase.petitioner ||
+        (uploadedCase.title?.split(/\s+(?:vs\.?|v\.?)\s+/i)[0]?.trim() || 'Petitioner / Appellant'),
+      respondent:
+        uploadedCase.respondent ||
+        (uploadedCase.title?.split(/\s+(?:vs\.?|v\.?)\s+/i)[1]?.trim() || 'State / Respondent'),
+      benchType: uploadedCase.case_type || 'High Court Bench',
+      disposition: uploadedCase.disposition?.status || 'ALLOWED - INJUNCTION ISSUED',
       statusBadge: (
         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-secondary-container text-on-secondary-container border border-secondary/40 shadow-2xs">
-          <span className="material-symbols-outlined text-[12px] text-secondary">verified</span> Certified Copy Ready
+          <AppIcon name="verified" className="w-3 h-3 text-secondary" /> Certified Copy Ready
         </span>
       ),
       tabCategory: 'certified',
       statutes: (uploadedCase.statutes_cited || []).map((s) => ({
-        name: s.section,
+        name: s.section || s.act || 'Statute',
         badgeClass: 'bg-emerald-50 text-emerald-900 border-emerald-200',
       })),
       stageTitle: 'Judgment Ingested & Analyzed',
@@ -219,6 +424,9 @@ export function App() {
         act: s.act,
         desc: s.description,
       })),
+      pages: uploadedCase.pages,
+      precedents_cited: uploadedCase.precedents_cited || [],
+      key_facts: uploadedCase.key_facts || [],
     };
 
     setDossiers((prev) => [newDoc, ...prev]);
@@ -292,25 +500,25 @@ export function App() {
     const q = searchQuery.toLowerCase();
 
     if (activeFilterKey === 'cnr') {
-      return d.cnr.toLowerCase().includes(q);
+      return (d.cnr || '').toLowerCase().includes(q);
     }
     if (activeFilterKey === 'party') {
-      return d.title.toLowerCase().includes(q);
+      return (d.title || '').toLowerCase().includes(q);
     }
     if (activeFilterKey === 'statute') {
-      return d.statutes.some((s) => s.name.toLowerCase().includes(q));
+      return d.statutes?.some((s) => s?.name?.toLowerCase().includes(q)) || false;
     }
     if (activeFilterKey === 'court') {
-      return d.court.toLowerCase().includes(q) || d.coram.toLowerCase().includes(q);
+      return (d.court || '').toLowerCase().includes(q) || (d.coram || '').toLowerCase().includes(q);
     }
 
     // 'all' key matches all fields
     return (
-      d.title.toLowerCase().includes(q) ||
-      d.cnr.toLowerCase().includes(q) ||
-      d.citation.toLowerCase().includes(q) ||
-      d.court.toLowerCase().includes(q) ||
-      d.statutes.some((s) => s.name.toLowerCase().includes(q))
+      (d.title || '').toLowerCase().includes(q) ||
+      (d.cnr || '').toLowerCase().includes(q) ||
+      (d.citation || '').toLowerCase().includes(q) ||
+      (d.court || '').toLowerCase().includes(q) ||
+      (d.statutes?.some((s) => s?.name?.toLowerCase().includes(q)) || false)
     );
   });
 
@@ -341,7 +549,10 @@ export function App() {
       />
 
       {/* 2. SUB-HEADER BREADCRUMB & CONTEXT BANNER */}
-      <SubHeaderBanner onSyncFeed={handleSyncFeed} />
+      <SubHeaderBanner
+        activeNav={activeNav}
+        onSyncFeed={handleSyncFeed}
+      />
 
       {/* 3. MAIN WORKSPACE / DASHBOARD CANVAS */}
       <main className="flex-1 px-4 lg:px-6 py-5 max-w-[1720px] mx-auto w-full space-y-5">
@@ -395,7 +606,7 @@ export function App() {
       />
 
       {/* 5. FLOATING NYAYA AI ACTION DOCK */}
-      {!isChatDrawerOpen && (
+      {!isChatDrawerOpen && activeNav !== 'judgments' && (
         <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-2">
           {/* Expandable Quick Actions */}
           {isAiFloatingExpanded && (
@@ -408,7 +619,7 @@ export function App() {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-primary text-xs font-semibold shadow-lg border border-slate-200 hover:border-secondary hover:text-secondary transition active:scale-95 cursor-pointer"
               >
                 <span>Statutory Sections</span>
-                <span className="material-symbols-outlined text-[16px] text-secondary">menu_book</span>
+                <AppIcon name="menu_book" className="w-4 h-4 text-secondary" />
               </button>
               <button
                 onClick={() => {
@@ -418,7 +629,7 @@ export function App() {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-primary text-xs font-semibold shadow-lg border border-slate-200 hover:border-secondary hover:text-secondary transition active:scale-95 cursor-pointer"
               >
                 <span>Draft Legal Notice</span>
-                <span className="material-symbols-outlined text-[16px] text-secondary">edit_document</span>
+                <AppIcon name="edit_document" className="w-4 h-4 text-secondary" />
               </button>
               <button
                 onClick={() => {
@@ -428,7 +639,7 @@ export function App() {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-primary text-xs font-semibold shadow-lg border border-slate-200 hover:border-secondary hover:text-secondary transition active:scale-95 cursor-pointer"
               >
                 <span>Verify DigiSeal</span>
-                <span className="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+                <AppIcon name="verified_user" className="w-4 h-4 text-secondary" />
               </button>
             </div>
           )}
@@ -440,9 +651,10 @@ export function App() {
               className="p-2.5 rounded-full bg-white text-primary hover:bg-slate-50 border border-slate-200 shadow-lg text-xs font-bold transition active:scale-95 cursor-pointer"
               title="More AI Tools"
             >
-              <span className="material-symbols-outlined text-[18px] text-secondary">
-                {isAiFloatingExpanded ? 'expand_more' : 'apps'}
-              </span>
+              <AppIcon
+                name={isAiFloatingExpanded ? 'expand_more' : 'apps'}
+                className="w-4 h-4 text-secondary"
+              />
             </button>
 
             <button
@@ -451,7 +663,7 @@ export function App() {
               title="Open Nyaya AI Legal Assistant"
             >
               <div className="w-6 h-6 rounded-full bg-secondary text-primary flex items-center justify-center font-bold text-xs shadow-xs group-hover:rotate-12 transition-transform">
-                <span className="material-symbols-outlined text-[15px]">smart_toy</span>
+                <AppIcon name="smart_toy" className="w-4 h-4" />
               </div>
               <span className="text-xs font-headline font-semibold text-white group-hover:text-secondary transition-colors">
                 Nyaya AI Assistant
@@ -470,9 +682,24 @@ export function App() {
         onClose={() => setIsDossierModalOpen(false)}
         onAskAi={(dossier) => handleOpenAi('chat', dossier)}
         onDownloadPdf={handleDownloadPdf}
-        onOpenSplitView={(dossier) => {
+        onOpenSplitView={async (dossier) => {
           setSelectedDossier(dossier);
           setActiveNav('judgments');
+          if (dossier?.id && (!dossier.headnote || !dossier.statutes?.length)) {
+            try {
+              const res = await fetchCase(dossier.id);
+              if (res?.dossier) {
+                const enriched = {
+                  ...dossier,
+                  ...normalizeToDossierCard({ id: res.case_id, ...res.dossier }),
+                };
+                setSelectedDossier(enriched);
+                setDossiers((prev) =>
+                  prev.map((d) => (d.id === dossier.id ? enriched : d))
+                );
+              }
+            } catch (_) {}
+          }
         }}
       />
 
@@ -572,7 +799,7 @@ export function App() {
       {/* 7. TOAST NOTIFICATION */}
       {toastMessage && (
         <div className="fixed bottom-6 left-6 z-50 bg-primary text-white border border-secondary/50 px-4 py-2.5 rounded-lg shadow-2xl flex items-center gap-2.5 text-xs font-label animate-in slide-in-from-bottom duration-200">
-          <span className="material-symbols-outlined text-secondary text-[18px]">verified</span>
+          <AppIcon name="verified" className="w-4 h-4 text-secondary" />
           <span>{toastMessage}</span>
         </div>
       )}

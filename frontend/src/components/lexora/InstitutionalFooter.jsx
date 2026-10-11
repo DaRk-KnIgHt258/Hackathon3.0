@@ -1,12 +1,13 @@
 import React from 'react';
+import AppIcon from '../common/AppIcon';
 
 export function InstitutionalFooter({ onOpenInstitutional }) {
   return (
     <footer className="bg-primary text-white border-t border-slate-800 mt-auto py-5 px-4 sm:px-6">
       <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-label text-slate-400">
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-1.5 text-white font-bold font-headline">
-            <span className="material-symbols-outlined text-secondary text-[18px]">balance</span>
+          <div className="flex items-center gap-2 text-white font-bold font-headline">
+            <AppIcon name="balance" className="w-4 h-4 text-secondary" />
             LexoraDocs Jurisprudence Intelligence
           </div>
           <span className="text-slate-600 hidden sm:inline">|</span>
@@ -48,3 +49,5 @@ export function InstitutionalFooter({ onOpenInstitutional }) {
     </footer>
   );
 }
+
+export default InstitutionalFooter;

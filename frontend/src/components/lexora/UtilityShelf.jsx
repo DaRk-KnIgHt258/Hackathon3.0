@@ -1,4 +1,5 @@
 import React from 'react';
+import AppIcon from '../common/AppIcon';
 
 export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
   return (
@@ -7,7 +8,7 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0 border border-secondary/30">
-            <span className="material-symbols-outlined text-[19px] text-secondary">verified</span>
+            <AppIcon name="verified" className="w-5 h-5 text-secondary" />
           </div>
           <div>
             <h4 className="font-headline text-sm font-bold text-primary tracking-tight">
@@ -35,8 +36,8 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-3.5">
         {/* Priority Download Vault */}
         <div className="space-y-2">
-          <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 font-label flex items-center gap-1">
-            <span className="material-symbols-outlined text-[13px] text-secondary">file_download</span> Priority Download Vault
+          <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 font-label flex items-center gap-1.5">
+            <AppIcon name="download" className="w-3.5 h-3.5 text-secondary" /> Priority Download Vault
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {/* Download Card 1 */}
@@ -44,10 +45,10 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <span className="w-6 h-6 rounded bg-red-50 text-red-700 flex items-center justify-center border border-red-200">
-                    <span className="material-symbols-outlined text-[14px]">picture_as_pdf</span>
+                    <AppIcon name="picture_as_pdf" className="w-3.5 h-3.5" />
                   </span>
-                  <span className="text-[9px] text-emerald-700 font-semibold font-mono flex items-center gap-0.5">
-                    <span className="material-symbols-outlined text-[11px]">verified</span> Attested
+                  <span className="text-[9px] text-emerald-700 font-semibold font-mono flex items-center gap-1">
+                    <AppIcon name="verified" className="w-3 h-3 text-emerald-600" /> Attested
                   </span>
                 </div>
                 <h5 className="text-xs font-semibold text-primary font-headline leading-tight line-clamp-2">
@@ -58,9 +59,9 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
               </div>
               <button
                 onClick={() => onDownloadItem && onDownloadItem('Supreme Court Daily Cause List', '4.2 MB')}
-                className="mt-2 w-full py-1 rounded bg-secondary-container hover:bg-secondary text-primary font-semibold text-xs border border-secondary/40 transition flex items-center justify-center gap-1 shadow-2xs active:scale-95"
+                className="mt-2 w-full py-1 rounded bg-secondary-container hover:bg-secondary text-primary font-semibold text-xs border border-secondary/40 transition flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[13px]">download</span> Get
+                <AppIcon name="download" className="w-3.5 h-3.5" /> Get
               </button>
             </div>
 
@@ -69,7 +70,7 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <span className="w-6 h-6 rounded bg-amber-50 text-amber-800 flex items-center justify-center border border-amber-200">
-                    <span className="material-symbols-outlined text-[14px]">workspace_premium</span>
+                    <AppIcon name="workspace_premium" className="w-3.5 h-3.5 text-amber-700" />
                   </span>
                   <span className="text-[9px] text-secondary font-semibold font-mono">Gold Seal</span>
                 </div>
@@ -81,9 +82,9 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
               </div>
               <button
                 onClick={() => onDownloadItem && onDownloadItem('Certified Judgment (Arnesh Kumar)', '1.8 MB')}
-                className="mt-2 w-full py-1 rounded bg-secondary text-primary font-semibold text-xs hover:bg-[#d6b46b] transition flex items-center justify-center gap-1 shadow-2xs active:scale-95"
+                className="mt-2 w-full py-1 rounded bg-secondary text-primary font-semibold text-xs hover:bg-[#d6b46b] transition flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[13px]">download</span> Get
+                <AppIcon name="download" className="w-3.5 h-3.5" /> Get
               </button>
             </div>
 
@@ -92,7 +93,7 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <span className="w-6 h-6 rounded bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
-                    <span className="material-symbols-outlined text-[14px]">edit_document</span>
+                    <AppIcon name="edit_document" className="w-3.5 h-3.5 text-blue-700" />
                   </span>
                   <span className="text-[9px] text-slate-600 font-mono">e-Filing Ready</span>
                 </div>
@@ -104,9 +105,9 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
               </div>
               <button
                 onClick={() => onDownloadItem && onDownloadItem('Caveat Petition Format', '840 KB')}
-                className="mt-2 w-full py-1 rounded bg-surface hover:bg-slate-100 text-primary font-semibold text-xs border border-outline-variant transition flex items-center justify-center gap-1 shadow-2xs active:scale-95"
+                className="mt-2 w-full py-1 rounded bg-surface hover:bg-slate-100 text-primary font-semibold text-xs border border-outline-variant transition flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[13px]">download</span> Get
+                <AppIcon name="download" className="w-3.5 h-3.5" /> Get
               </button>
             </div>
           </div>
@@ -115,15 +116,15 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
         {/* Notices Mini-Strip */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 font-label flex items-center gap-1">
-              <span className="material-symbols-outlined text-[13px] text-amber-600">timer</span> Active Limitation Timelines
+            <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-500 font-label flex items-center gap-1.5">
+              <AppIcon name="timer" className="w-3.5 h-3.5 text-amber-600" /> Active Limitation Timelines
             </span>
             <button
               onClick={() => onNoticeAction && onNoticeAction('browse_archives')}
-              className="text-primary hover:text-secondary font-semibold text-[11px] flex items-center gap-0.5 transition"
+              className="text-primary hover:text-secondary font-semibold text-[11px] flex items-center gap-1 transition"
             >
-              Browse All 3,410 Certified PDF Archives{' '}
-              <span className="material-symbols-outlined text-[12px]">arrow_forward</span>
+              Browse All 3,410 Certified PDF Archives
+              <AppIcon name="arrow_forward" className="w-3 h-3 text-secondary" />
             </button>
           </div>
 
@@ -148,7 +149,7 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
                 <span className="text-emerald-700 font-medium truncate">Delivered (Ack Due)</span>
                 <button
                   onClick={() => onNoticeAction && onNoticeAction('pod', '#LN-2025-0842')}
-                  className="text-primary hover:text-secondary font-semibold shrink-0 ml-1"
+                  className="text-primary hover:text-secondary font-semibold shrink-0 ml-1 cursor-pointer"
                 >
                   POD Slip
                 </button>
@@ -175,7 +176,7 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
                 <span className="text-amber-700 font-medium truncate">In-Transit (#ED81249)</span>
                 <button
                   onClick={() => onNoticeAction && onNoticeAction('track', '#LN-2025-0839')}
-                  className="text-primary hover:text-secondary font-semibold shrink-0 ml-1"
+                  className="text-primary hover:text-secondary font-semibold shrink-0 ml-1 cursor-pointer"
                 >
                   Track
                 </button>
@@ -202,9 +203,9 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
                 <span className="text-slate-600 font-medium truncate">Delivered & Docketed</span>
                 <button
                   onClick={() => onNoticeAction && onNoticeAction('response_pdf', '#LN-2025-0821')}
-                  className="text-primary hover:text-secondary font-bold shrink-0 ml-1 flex items-center gap-0.5"
+                  className="text-primary hover:text-secondary font-bold shrink-0 ml-1 flex items-center gap-1 cursor-pointer"
                 >
-                  <span className="material-symbols-outlined text-[11px]">description</span> PDF
+                  <AppIcon name="description" className="w-3 h-3 text-secondary" /> PDF
                 </button>
               </div>
             </div>
@@ -214,3 +215,5 @@ export function UtilityShelf({ onDownloadItem, onNoticeAction }) {
     </div>
   );
 }
+
+export default UtilityShelf;
