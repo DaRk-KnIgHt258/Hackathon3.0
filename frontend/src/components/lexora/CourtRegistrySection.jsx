@@ -16,6 +16,7 @@ export function CourtRegistrySection({
   onRequestSeal,
   onBatchCheck,
   onExportSheet,
+  onOpenUpload,
   onOpenGazette,
   onAskAi,
   selectedForum = 'all',
@@ -90,6 +91,17 @@ export function CourtRegistrySection({
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
+            {onOpenUpload && (
+              <button
+                onClick={onOpenUpload}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-primary hover:bg-[#d6b46b]
+                           text-xs font-bold shadow-2xs transition-all duration-150 active:scale-95 cursor-pointer"
+                title="Upload Court Judgment PDF"
+              >
+                <AppIcon name="upload_file" className="w-3.5 h-3.5 text-primary" />
+                <span className="hidden sm:inline">Upload Judgment</span>
+              </button>
+            )}
             <button
               onClick={onBatchCheck}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface hover:bg-slate-100 border border-outline-variant

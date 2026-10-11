@@ -67,6 +67,7 @@ export function normalizeCaseForWorkspace(caseObj) {
       section: st.section || 'Statute',
       description: st.desc || 'Procedural section scrutinized under appellate jurisdiction.',
       context_in_case: `Statutory compliance mandated in ${titleStr}`,
+      page_ref: st.page_ref || null,
     }));
   } else if (Array.isArray(caseObj.statutes_cited) && caseObj.statutes_cited.length > 0) {
     statutes_cited = caseObj.statutes_cited;
@@ -177,7 +178,7 @@ export function normalizeCaseForWorkspace(caseObj) {
     title: titleStr,
     case_number,
     court: caseObj.court || benchmark?.court || 'Supreme Court of India',
-    date: caseObj.judgment_date || caseObj.date || benchmark?.date || 'July 2014',
+    date: caseObj.date || caseObj.judgment_date || (caseId.startsWith('uploaded_') ? 'January 2017' : benchmark?.date || 'July 2014'),
     coram: Array.isArray(caseObj.coram)
       ? caseObj.coram
       : caseObj.coram
@@ -217,11 +218,13 @@ export function JudgmentReviewWorkspace({
   onOpenUpload,
 }) {
   const [selectedCaseId, setSelectedCaseId] = useState(caseData?.id || MOCK_CASES[0].id);
+  const [activeCitation, setActiveCitation] = useState(null);
 
   // Sync selectedCaseId when caseData prop changes
   useEffect(() => {
     if (caseData?.id) {
       setSelectedCaseId(caseData.id);
+      setActiveCitation(null);
     }
   }, [caseData?.id]);
 
@@ -292,16 +295,34 @@ export function JudgmentReviewWorkspace({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Left Column: Interactive Original Court Record Viewer */}
         <div className="space-y-4">
-          <DocumentViewer activeCase={activeCase} />
+          <DocumentViewer
+            activeCase={activeCase}
+            activeCitation={activeCitation}
+            onClearCitation={() => setActiveCitation(null)}
+          />
         </div>
 
         {/* Right Column: Case Dossier & Intelligence Tabs */}
         <div className="space-y-4">
           <DossierHeader activeCase={activeCase} />
 
-          <SummaryTabs activeCase={activeCase} />
+          <SummaryTabs
+            activeCase={activeCase}
+            onSelectCitation={(citation) => setActiveCitation(citation)}
+          />
 
-          <StatutoryCards statutes={activeCase.statutes_cited} />
+          <StatutoryCards
+            statutes={activeCase.statutes_cited}
+            onSelectCitation={(statuteOrSection) => {
+              // Can pass object with page_ref or string
+              if (typeof statuteOrSection === 'object') {
+                setActiveCitation(statuteOrSection);
+              } else {
+                const found = activeCase.statutes_cited?.find((s) => s.section === statuteOrSection);
+                setActiveCitation(found || statuteOrSection);
+              }
+            }}
+          />
 
           {/* Quick Action Dock - Cohesive Light Institutional Palette */}
           <div className="p-4 bg-white rounded-xl border border-outline-variant shadow-sm flex flex-wrap items-center justify-between gap-3">

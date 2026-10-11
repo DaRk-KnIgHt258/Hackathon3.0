@@ -96,17 +96,22 @@ export function StatutoryCards({ statutes = [], onSelectCitation }) {
                   <span className="text-xs font-semibold text-primary">{item.act}</span>
                 </button>
 
-                <div className="flex items-center gap-2">
-                  {onSelectCitation && (
-                    <button
-                      onClick={() => onSelectCitation(item.section)}
-                      className="flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition cursor-pointer"
-                      title="Jump to this statutory section in judgment text"
-                    >
-                      <span>Jump</span>
-                      <ExternalLink className="w-2.5 h-2.5" />
-                    </button>
-                  )}
+                  <div className="flex items-center gap-2">
+                    {item.page_ref && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                        {item.page_ref}
+                      </span>
+                    )}
+                    {onSelectCitation && (
+                      <button
+                        onClick={() => onSelectCitation(item)}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition cursor-pointer shadow-2xs"
+                        title="Jump to this citation in original document"
+                      >
+                        <span>{item.page_ref ? `Jump to ${item.page_ref}` : 'View in Doc'}</span>
+                        <ExternalLink className="w-2.5 h-2.5" />
+                      </button>
+                    )}
 
                   <button
                     onClick={() => toggleExpand(index)}

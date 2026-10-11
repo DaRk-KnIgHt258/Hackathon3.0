@@ -148,7 +148,14 @@ export function CaseDossierModal({
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-primary font-mono">{st.section}</span>
-                      <span className="text-[10px] text-slate-500 font-semibold">{st.act}</span>
+                      <div className="flex items-center gap-1.5">
+                        {st.page_ref && (
+                          <span className="text-[10px] font-mono font-bold bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.2 rounded">
+                            {st.page_ref}
+                          </span>
+                        )}
+                        <span className="text-[10px] text-slate-500 font-semibold">{st.act}</span>
+                      </div>
                     </div>
                     <p className="text-slate-600 font-body">{st.desc}</p>
                   </div>

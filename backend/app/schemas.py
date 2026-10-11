@@ -18,6 +18,8 @@ class StatuteCited(BaseModel):
     section: str = Field(description="Specific section or article, e.g., Section 438 or Article 226")
     description: str = Field(description="Plain-English 1-sentence meaning of this section")
     context_in_case: str = Field(description="How this section was applied or contested in this judgment")
+    page_ref: Optional[str] = Field(default=None, description="Exact page/paragraph reference in judgment, e.g., 'Page 2, Para 3'")
+
 
 
 class CaseDossier(BaseModel):
@@ -45,11 +47,17 @@ class CaseDossier(BaseModel):
 # API-level request / response wrappers
 # ---------------------------------------------------------------------------
 
+class PageContent(BaseModel):
+    page: int
+    text: str
+
+
 class AnalyzeResponse(BaseModel):
     case_id: str
     dossier: CaseDossier
     total_pages: int
     processing_time_ms: float
+    pages: Optional[List[PageContent]] = None
 
 
 class CaseListItem(BaseModel):

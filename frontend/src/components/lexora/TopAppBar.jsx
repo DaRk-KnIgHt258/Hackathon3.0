@@ -22,7 +22,7 @@ export function TopAppBar({
   activeNav, onNavChange,
   activeFilterKey, onFilterKeyChange,
   selectedForum, onSelectForum,
-  onOpenNewDocket, onOpenChat,
+  onOpenNewDocket, onOpenUpload, onOpenChat,
   onOpenAdvancedSearch, onOpenNotifications,
   onOpenSupportDesk, onOpenCounselProfile,
 }) {
@@ -172,6 +172,18 @@ export function TopAppBar({
             title="Registry Support Desk"
           >
             <AppIcon name="help_outline" className="w-4.5 h-4.5" />
+          </button>
+
+          {/* Upload Judgment CTA */}
+          <button
+            onClick={onOpenUpload}
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold font-label
+                       bg-secondary text-primary hover:bg-[#d6b46b]
+                       shadow-sm active:scale-95 transition-all duration-150 cursor-pointer"
+            title="Upload Court Order PDF"
+          >
+            <AppIcon name="upload_file" className="w-4 h-4 text-primary" />
+            Upload Judgment
           </button>
 
           {/* New Docket CTA */}

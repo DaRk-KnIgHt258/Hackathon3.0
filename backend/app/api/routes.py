@@ -113,6 +113,7 @@ async def analyze_document(
         dossier=dossier,
         total_pages=total_pages,
         processing_time_ms=round(elapsed_ms, 2),
+        pages=extracted.get("pages"),
     )
 
 
@@ -176,11 +177,25 @@ def get_case(case_id: str, db: Session = Depends(get_db)):
     record = db.query(CaseRecord).filter(CaseRecord.id == case_id).first()
     if not record:
         raise HTTPException(status_code=404, detail=f"Case '{case_id}' not found.")
+    # Reconstruct pages from full_text if available
+    pages_list = []
+    if record.full_text and "--- PAGE " in record.full_text:
+        parts = record.full_text.split("--- PAGE ")
+        for p in parts[1:]:
+            lines = p.split("\n", 1)
+            try:
+                page_num = int(lines[0].split(" ---")[0].strip())
+                text = lines[1] if len(lines) > 1 else ""
+                pages_list.append({"page": page_num, "text": text.strip()})
+            except Exception:
+                continue
+
     return AnalyzeResponse(
         case_id=record.id,
         dossier=_record_to_dossier(record),
         total_pages=record.total_pages,
         processing_time_ms=record.processing_time_ms,
+        pages=pages_list if pages_list else None,
     )
 
 

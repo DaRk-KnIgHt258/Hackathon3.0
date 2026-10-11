@@ -1,58 +1,104 @@
 import React from 'react';
 import { AppIcon } from '../common/AppIcon';
 
-const KPI_DATA = [
-  {
-    key: 'all',
-    label: 'Active Dockets',
-    icon: 'account_balance',
-    iconBg: 'bg-primary/8',
-    iconColor: 'text-primary',
-    badge: { text: '+14 this week', bg: 'bg-emerald-50', text2: 'text-emerald-700', border: 'border-emerald-200' },
-    footer: { icon: 'calendar_today', text: '3 Listed Today', sub: '98.4% On-Track', iconColor: 'text-secondary' },
-    accentBar: 'bg-primary',
-  },
-  {
-    key: 'certified',
-    label: 'Certified Copies',
-    value: '842',
-    icon: 'verified',
-    iconBg: 'bg-secondary/15',
-    iconColor: 'text-secondary',
-    badge: { text: 'DigiSeal Attested', bg: 'bg-secondary-container', text2: 'text-on-secondary-container', border: 'border-secondary/30' },
-    footer: { icon: 'workspace_premium', text: 'Gold Seal Ready', sub: '12 Pending Seal', iconColor: 'text-secondary' },
-    accentBar: 'bg-secondary',
-  },
-  {
-    key: 'notices',
-    label: 'Limitation Watch',
-    value: '29',
-    icon: 'timer',
-    iconBg: 'bg-amber-50',
-    iconColor: 'text-amber-700',
-    badge: { text: '4 Expiring <48h', bg: 'bg-amber-50', text2: 'text-amber-800', border: 'border-amber-300' },
-    footer: { icon: 'mail', text: 'Postal Ack: 21 Delivered', sub: '8 In-Transit', iconColor: 'text-amber-600' },
-    accentBar: 'bg-amber-500',
-  },
-  {
-    key: 'vault',
-    label: 'Archived Files',
-    value: '3,410',
-    icon: 'folder_open',
-    iconBg: 'bg-blue-50',
-    iconColor: 'text-blue-700',
-    badge: { text: '3.2 GB Cached', bg: 'bg-blue-50', text2: 'text-blue-800', border: 'border-blue-200' },
-    footer: { icon: 'download', text: 'One-Click Ready', sub: 'SHA-256 Hashed', iconColor: 'text-secondary' },
-    accentBar: 'bg-blue-500',
-  },
-];
-
 const STAGGER = ['stagger-1', 'stagger-2', 'stagger-3', 'stagger-4'];
 
-export function KpiStrip({ totalCases = 1248, onKpiClick }) {
+export function KpiStrip({ dossiers = [], totalCases, onKpiClick }) {
+  const totalCount = typeof totalCases === 'number' ? totalCases : dossiers.length;
+  const certifiedCount = dossiers.filter((d) => d.tabCategory === 'certified' || d.disposition?.includes('ALLOWED') || d.stageTitle?.toLowerCase().includes('final')).length;
+  const hearingCount = dossiers.filter((d) => d.tabCategory === 'hearing' || d.stageTitle?.toLowerCase().includes('hearing')).length;
+  const reservedCount = dossiers.filter((d) => d.tabCategory === 'reserved' || d.stageTitle?.toLowerCase().includes('reserved')).length;
+
+  const kpis = [
+    {
+      key: 'all',
+      label: 'Active Dockets',
+      value: totalCount,
+      icon: 'account_balance',
+      iconBg: 'bg-primary/8',
+      iconColor: 'text-primary',
+      badge: {
+        text: totalCount > 0 ? `${totalCount} Tracked` : '0 Active',
+        bg: 'bg-emerald-50',
+        text2: 'text-emerald-700',
+        border: 'border-emerald-200',
+      },
+      footer: {
+        icon: 'calendar_today',
+        text: hearingCount > 0 ? `${hearingCount} Listed Today` : 'Registry Synced',
+        sub: reservedCount > 0 ? `${reservedCount} Reserved` : 'Up to Date',
+        iconColor: 'text-secondary',
+      },
+      accentBar: 'bg-primary',
+    },
+    {
+      key: 'certified',
+      label: 'Certified Copies',
+      value: certifiedCount,
+      icon: 'verified',
+      iconBg: 'bg-secondary/15',
+      iconColor: 'text-secondary',
+      badge: {
+        text: 'DigiSeal Verified',
+        bg: 'bg-secondary-container',
+        text2: 'text-on-secondary-container',
+        border: 'border-secondary/30',
+      },
+      footer: {
+        icon: 'workspace_premium',
+        text: 'Registry Sealed',
+        sub: `${certifiedCount} Ready`,
+        iconColor: 'text-secondary',
+      },
+      accentBar: 'bg-secondary',
+    },
+    {
+      key: 'notices',
+      label: 'Limitation Watch',
+      value: '3',
+      icon: 'timer',
+      iconBg: 'bg-amber-50',
+      iconColor: 'text-amber-700',
+      badge: {
+        text: 'Active Timelines',
+        bg: 'bg-amber-50',
+        text2: 'text-amber-800',
+        border: 'border-amber-300',
+      },
+      footer: {
+        icon: 'mail',
+        text: 'Statutory Radar',
+        sub: 'Track Lim. Acts',
+        iconColor: 'text-amber-600',
+      },
+      accentBar: 'bg-amber-500',
+    },
+    {
+      key: 'vault',
+      label: 'Priority Vault',
+      value: '3',
+      icon: 'folder_open',
+      iconBg: 'bg-blue-50',
+      iconColor: 'text-blue-700',
+      badge: {
+        text: 'Ready for DL',
+        bg: 'bg-blue-50',
+        text2: 'text-blue-800',
+        border: 'border-blue-200',
+      },
+      footer: {
+        icon: 'download',
+        text: 'Encrypted Vault',
+        sub: 'SHA-256 Verified',
+        iconColor: 'text-secondary',
+      },
+      accentBar: 'bg-blue-500',
+    },
+  ];
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-      {KPI_DATA.map((kpi, i) => (
+      {kpis.map((kpi, i) => (
         <button
           key={kpi.key}
           onClick={() => onKpiClick?.(kpi.key)}
@@ -80,7 +126,7 @@ export function KpiStrip({ totalCases = 1248, onKpiClick }) {
           {/* Value */}
           <div className="animate-count-up">
             <div className="font-headline text-2xl sm:text-3xl font-bold text-primary tracking-tight leading-none">
-              {kpi.key === 'all' ? totalCases.toLocaleString() : kpi.value}
+              {typeof kpi.value === 'number' ? kpi.value.toLocaleString() : kpi.value}
             </div>
             <div className="text-xs text-slate-500 font-medium mt-0.5">{kpi.label}</div>
           </div>

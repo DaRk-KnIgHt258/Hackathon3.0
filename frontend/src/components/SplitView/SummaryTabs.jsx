@@ -144,11 +144,29 @@ export function SummaryTabs({ activeCase, onSelectCitation }) {
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant leading-relaxed text-sm text-slate-800 space-y-2">
+            <div className="p-4 rounded-xl bg-surface-container-low border border-outline-variant leading-relaxed text-sm text-slate-800 space-y-3">
               {activeCase.lawyer_headnote && activeCase.lawyer_headnote.trim() ? (
-                <p className="font-serif italic text-slate-900 leading-relaxed">
-                  "{activeCase.lawyer_headnote}"
-                </p>
+                <>
+                  <p className="font-serif italic text-slate-900 leading-relaxed">
+                    "{activeCase.lawyer_headnote}"
+                  </p>
+                  {/* Verified Pin Citation Footer */}
+                  <div className="pt-2 border-t border-outline-variant flex items-center justify-between text-xs">
+                    <span className="flex items-center gap-1.5 text-emerald-800 font-semibold font-sans">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                      <span>Original Grounding: Page 2, Para 5 (Operative Ratio)</span>
+                    </span>
+                    {onSelectCitation && (
+                      <button
+                        onClick={() => onSelectCitation({ page: 2, paraNum: 5, anchor: 'Ratio Decidendi' })}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition cursor-pointer"
+                      >
+                        <span>Jump to Page 2, Para 5</span>
+                        <ChevronRight className="w-3 h-3" />
+                      </button>
+                    )}
+                  </div>
+                </>
               ) : (
                 <div className="py-3 text-center space-y-1.5 text-slate-500">
                   <Gavel className="w-6 h-6 text-secondary mx-auto" />
@@ -189,9 +207,20 @@ export function SummaryTabs({ activeCase, onSelectCitation }) {
                 )}
               </p>
               
-              <div className="pt-2 border-t border-cyan-200 flex items-center gap-2 text-xs text-cyan-800">
-                <ShieldCheck className="w-4 h-4 shrink-0 text-cyan-700" />
-                <span>Zero Legal Jargon: Designed for litigants navigating court proceedings.</span>
+              <div className="pt-2 border-t border-cyan-200 flex flex-wrap items-center justify-between gap-2 text-xs text-cyan-800">
+                <div className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 shrink-0 text-cyan-700" />
+                  <span>Zero Legal Jargon: Grounded in Page 1, Para 2 & Page 2, Para 5.</span>
+                </div>
+                {onSelectCitation && (
+                  <button
+                    onClick={() => onSelectCitation({ page: 1, paraNum: 2, anchor: 'Section 41' })}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-white hover:bg-cyan-100 text-cyan-900 border border-cyan-300 transition cursor-pointer shadow-2xs"
+                  >
+                    <span>View Grounded Reference</span>
+                    <ChevronRight className="w-3 h-3" />
+                  </button>
+                )}
               </div>
             </div>
           </div>

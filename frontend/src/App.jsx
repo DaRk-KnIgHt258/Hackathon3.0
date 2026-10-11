@@ -116,7 +116,7 @@ function normalizeToDossierCard(c) {
     citizenSummaryMr: c.citizenSummaryMr || '',
     petitioner,
     respondent,
-    statuteDetails: statutesCited.map((s) => ({ section: s.section, act: s.act, desc: s.description || '' })),
+    statuteDetails: statutesCited.map((s) => ({ section: s.section, act: s.act, desc: s.description || '', page_ref: s.page_ref || null })),
     precedents_cited: c.precedents_cited || benchmark?.precedents_cited || [],
     key_facts: c.key_facts || benchmark?.key_facts || [],
     pages: c.pages || benchmark?.pages,
@@ -387,6 +387,8 @@ export function App() {
       appealNumber: uploadedCase.case_number,
       diaryNumber: `Diary # ${Math.floor(10000 + Math.random() * 80000)}/2025`,
       court: uploadedCase.court,
+      date: uploadedCase.date || uploadedCase.judgment_date || 'January 19, 2017',
+      judgment_date: uploadedCase.date || uploadedCase.judgment_date || 'January 19, 2017',
       coram: Array.isArray(uploadedCase.coram) ? uploadedCase.coram.join('; ') : (uploadedCase.coram || "Hon'ble High Court Bench"),
       petitioner:
         uploadedCase.petitioner ||
@@ -423,7 +425,9 @@ export function App() {
         section: s.section,
         act: s.act,
         desc: s.description,
+        page_ref: s.page_ref || null,
       })),
+      statutes_cited: uploadedCase.statutes_cited || [],
       pages: uploadedCase.pages,
       precedents_cited: uploadedCase.precedents_cited || [],
       key_facts: uploadedCase.key_facts || [],
@@ -431,6 +435,7 @@ export function App() {
 
     setDossiers((prev) => [newDoc, ...prev]);
     setSelectedDossier(newDoc);
+    setActiveNav('judgments');
     showToast(`Uploaded & Parsed Judgment: ${uploadedCase.title}`);
   };
 
@@ -541,6 +546,7 @@ export function App() {
           showToast(`Filtered forum to ${forum.toUpperCase()}`);
         }}
         onOpenNewDocket={() => setIsNewDocketModalOpen(true)}
+        onOpenUpload={() => setIsUploadZoneOpen(true)}
         onOpenChat={(tab = 'chat') => handleOpenAi(tab)}
         onOpenAdvancedSearch={() => setIsAdvancedSearchOpen(true)}
         onOpenNotifications={() => setIsNotificationsOpen(true)}
@@ -569,7 +575,7 @@ export function App() {
           <>
             {/* KPI Strip (4 High-Density Cards) */}
             <KpiStrip
-              totalCases={dossiers.length * 250}
+              dossiers={dossiers}
               onKpiClick={handleKpiClick}
             />
 
@@ -589,6 +595,7 @@ export function App() {
               onRequestSeal={handleRequestSeal}
               onBatchCheck={handleBatchCheck}
               onExportSheet={handleExportSheet}
+              onOpenUpload={() => setIsUploadZoneOpen(true)}
               onOpenGazette={() => setIsGazetteModalOpen(true)}
               onAskAi={(dossier) => handleOpenAi('chat', dossier)}
               selectedForum={selectedForum}

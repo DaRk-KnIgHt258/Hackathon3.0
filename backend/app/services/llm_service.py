@@ -30,7 +30,8 @@ Critical guidelines:
    - "Constitution" → "Constitution of India"
 4. Identify ALL judges on the bench for the 'coram' list.
 5. Provide jargon-free citizen summaries in BOTH English and natural, conversational Hindi.
-6. The lawyer_headnote must emphasize the Ratio Decidendi and its precedential value.
+6. The lawyer_headnote must emphasize the Ratio Decidendi and its precedential value, citing the exact page or paragraph where the principle is articulated (e.g., "[Page 3, Para 8]").
+7. For every item in statutes_cited, ALWAYS specify the page_ref indicating where the statute was addressed in the judgment text (e.g. "Page 1, Para 2").
 """
 
 
