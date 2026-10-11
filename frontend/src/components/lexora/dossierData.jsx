@@ -37,6 +37,8 @@ export const INITIAL_DOSSIERS = [
       'Police cannot arrest someone automatically merely because a domestic cruelty complaint is filed under Section 498A. They must first serve a notice to appear under Section 41A and record written reasons before any arrest.',
     citizenSummaryHi:
       'पुलिस केवल धारा 498A के तहत घरेलू उत्पीड़न की शिकायत दर्ज होने पर आरोपी को तुरंत गिरफ्तार नहीं कर सकती। गिरफ्तारी से पहले धारा 41A का नोटिस देना और कानूनी कारणों को दर्ज करना अनिवार्य है।',
+    citizenSummaryMr:
+      'हुंडा किंवा घरगुती छळाची तक्रार दाखल होताच पोलीस कोणालाही थेट अटक करू शकत नाहीत. प्रथम सीआरपीसी कलम 41A अन्वये नोटीस देणे आणि लिखित कारणे नोंदवणे बंधनकारक आहे.',
     statuteDetails: [
       {
         section: 'Section 498-A IPC',
@@ -86,6 +88,8 @@ export const INITIAL_DOSSIERS = [
       'Every Indian citizen has a fundamental constitutional right to privacy regarding personal data, bodily integrity, and informational autonomy against unlawful state overreach.',
     citizenSummaryHi:
       'सर्वोच्च न्यायालय की 9-न्यायाधीशों की संविधान पीठ ने फैसला सुनाया कि निजता का अधिकार (Right to Privacy) संविधान के अनुच्छेद 21 के तहत एक मौलिक अधिकार है।',
+    citizenSummaryMr:
+      'सर्वोच्च न्यायालयाच्या ९ न्यायाधीशांच्या घटनापीठाने गोपनीयतेचा अधिकार (Right to Privacy) हा घटनेच्या कलम २१ अंतर्गत मूलभूत अधिकार घोषित केला.',
     statuteDetails: [
       {
         section: 'Article 21',
@@ -135,6 +139,8 @@ export const INITIAL_DOSSIERS = [
       'In cheque bounce cases, the trial court is determined by the bank branch where the payee maintains an account and presents the cheque for clearing.',
     citizenSummaryHi:
       'चेक बाउंस के मामलों में कानूनी शिकायत उसी अदालत में दर्ज की जाती है जहां चेक प्राप्तकर्ता का बैंक खाता स्थित है।',
+    citizenSummaryMr:
+      'धनादेश अनादर (चेक बाउंस) प्रकरणात खटला फक्त संबंधित बँक शाखा असलेल्या न्यायालयाच्या अखत्यारीत दाखल केला जाऊ शकतो.',
     statuteDetails: [
       {
         section: 'Section 138',
@@ -183,6 +189,8 @@ export const INITIAL_DOSSIERS = [
       'Landmark judgment establishing clear rules on which commercial disputes can be resolved via private arbitration versus those that must go to civil courts.',
     citizenSummaryHi:
       'मध्यस्थता (Arbitration) और अदालती मुकदमों के बीच स्पष्ट सीमा रेखा तय करते हुए चार-चरणीय परीक्षण स्थापित किया गया।',
+    citizenSummaryMr:
+      'लवाद (आर्बिट्रेशन) आणि न्यायालयीन खटले यांच्यातील फरक निश्चित करण्यासाठी चार टप्प्यांची मार्गदर्शक तत्त्वे स्थापित केली.',
     statuteDetails: [
       {
         section: 'Section 8 & 11',
@@ -227,6 +235,8 @@ export const INITIAL_DOSSIERS = [
       'Corporate law milestone regarding executive boardroom removals and shareholder rights in multi-tier corporate conglomerates.',
     citizenSummaryHi:
       'कंपनी कानून के तहत बोर्ड प्रबंधन निर्णयों और शेयरधारक अधिकारों पर सर्वोच्च न्यायालय का ऐतिहासिक निर्णय।',
+    citizenSummaryMr:
+      'कंपनी कायद्यांतर्गत संचालक मंडळाचे निर्णय आणि भागधारकांचे अधिकार यावर सर्वोच्च न्यायालयाचा ऐतिहासिक निकाल.',
     statuteDetails: [
       {
         section: 'Section 241 & 242',

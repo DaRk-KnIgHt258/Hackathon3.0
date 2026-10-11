@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export function ModularDossierCards({
   dossiers = [],
   onSelectDossier,
   onDownloadPdf,
   onRequestSeal,
+  onAskAi,
+  onOpenGuidelines,
 }) {
+  const [activeMenuId, setActiveMenuId] = useState(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setActiveMenuId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" ref={menuRef}>
       {dossiers.map((card) => {
+        const isMenuOpen = activeMenuId === card.id;
+
         return (
           <div
             key={card.id}
-            className="bg-surface rounded-lg border border-outline-variant hover:border-secondary/50 shadow-sm transition-all flex flex-col justify-between overflow-hidden group cursor-pointer"
+            className="bg-surface rounded-lg border border-outline-variant hover:border-secondary/50 shadow-sm transition-all flex flex-col justify-between overflow-hidden group cursor-pointer relative"
             onClick={() => onSelectDossier && onSelectDossier(card)}
           >
             {/* Card Header */}
@@ -83,30 +100,94 @@ export function ModularDossierCards({
 
             {/* Card Action Footer */}
             <div
-              className="px-4 py-2.5 bg-slate-50 border-t border-outline-variant flex items-center justify-between"
+              className="px-4 py-2.5 bg-slate-50 border-t border-outline-variant flex items-center justify-between relative"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => {
-                  if (card.actionType === 'download') {
-                    onDownloadPdf && onDownloadPdf(card);
-                  } else {
-                    onSelectDossier && onSelectDossier(card);
-                  }
-                }}
-                className={`px-3 py-1.5 rounded font-semibold text-xs flex items-center gap-1 shadow-2xs transition active:scale-95 ${card.actionBtnClass}`}
-              >
-                <span className="material-symbols-outlined text-[14px]">{card.actionIcon}</span>
-                {card.actionLabel}
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    if (card.actionType === 'download') {
+                      onDownloadPdf && onDownloadPdf(card);
+                    } else {
+                      onSelectDossier && onSelectDossier(card);
+                    }
+                  }}
+                  className={`px-3 py-1.5 rounded font-semibold text-xs flex items-center gap-1 shadow-2xs transition active:scale-95 cursor-pointer ${card.actionBtnClass}`}
+                >
+                  <span className="material-symbols-outlined text-[14px]">{card.actionIcon}</span>
+                  {card.actionLabel}
+                </button>
 
-              <button
-                onClick={() => onSelectDossier && onSelectDossier(card)}
-                className="p-1 rounded text-slate-400 hover:text-primary hover:bg-slate-100 transition"
-                title="More Options"
-              >
-                <span className="material-symbols-outlined text-[16px]">more_vert</span>
-              </button>
+                {/* Direct Ask Nyaya AI button */}
+                <button
+                  onClick={() => onAskAi && onAskAi(card)}
+                  className="px-2.5 py-1.5 rounded bg-white hover:bg-secondary/15 text-primary hover:text-secondary border border-outline-variant font-semibold text-xs flex items-center gap-1 transition active:scale-95 cursor-pointer"
+                  title="Ask Nyaya AI about this Case"
+                >
+                  <span className="material-symbols-outlined text-[14px] text-secondary">smart_toy</span>
+                  <span>AI Q&A</span>
+                </button>
+              </div>
+
+              {/* Options menu button */}
+              <div className="relative">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveMenuId(isMenuOpen ? null : card.id);
+                  }}
+                  className="p-1 rounded text-slate-400 hover:text-primary hover:bg-slate-200/60 transition cursor-pointer"
+                  title="More Options"
+                >
+                  <span className="material-symbols-outlined text-[18px]">more_vert</span>
+                </button>
+
+                {/* Dropdown Menu */}
+                {isMenuOpen && (
+                  <div className="absolute right-0 bottom-8 w-48 bg-white border border-outline-variant rounded-lg shadow-xl py-1 z-30 animate-in fade-in zoom-in-95 duration-100 text-xs text-slate-700">
+                    <button
+                      onClick={() => {
+                        setActiveMenuId(null);
+                        onSelectDossier(card);
+                      }}
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[15px] text-primary">visibility</span>
+                      View Case Dossier
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveMenuId(null);
+                        onAskAi && onAskAi(card);
+                      }}
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2 text-primary font-medium"
+                    >
+                      <span className="material-symbols-outlined text-[15px] text-secondary">smart_toy</span>
+                      Ask Nyaya AI
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveMenuId(null);
+                        onDownloadPdf && onDownloadPdf(card);
+                      }}
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[15px] text-emerald-600">download</span>
+                      Download Certified PDF
+                    </button>
+                    <button
+                      onClick={() => {
+                        setActiveMenuId(null);
+                        navigator.clipboard.writeText(`${card.title} - ${card.citation} (${card.cnr})`);
+                      }}
+                      className="w-full text-left px-3 py-1.5 hover:bg-slate-50 flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[15px] text-slate-500">content_copy</span>
+                      Copy Citation
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         );
@@ -136,21 +217,17 @@ export function ModularDossierCards({
         <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between">
           <button
             onClick={() => onRequestSeal && onRequestSeal()}
-            className="px-3 py-1.5 rounded bg-secondary hover:bg-[#d6b46b] text-primary text-xs font-bold font-label transition shadow-sm flex items-center gap-1.5 active:scale-95"
+            className="px-3 py-1.5 rounded bg-secondary hover:bg-[#d6b46b] text-primary text-xs font-bold font-label transition shadow-sm flex items-center gap-1.5 active:scale-95 cursor-pointer"
           >
             <span className="material-symbols-outlined text-[16px]">how_to_reg</span>
             Request Seal Verification
           </button>
-          <a
-            href="#guidelines"
-            onClick={(e) => {
-              e.preventDefault();
-              onRequestSeal && onRequestSeal();
-            }}
-            className="text-xs text-secondary hover:underline font-label font-medium px-2 py-1"
+          <button
+            onClick={() => onOpenGuidelines && onOpenGuidelines()}
+            className="text-xs text-secondary hover:underline font-label font-medium px-2 py-1 cursor-pointer"
           >
             Desk Guidelines
-          </a>
+          </button>
         </div>
       </div>
     </div>

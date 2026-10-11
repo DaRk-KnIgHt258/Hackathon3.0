@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ModularDossierCards } from './ModularDossierCards';
 
 export function CourtRegistrySection({
@@ -8,11 +8,18 @@ export function CourtRegistrySection({
   onRequestSeal,
   onBatchCheck,
   onExportSheet,
+  onOpenGazette,
+  onAskAi,
+  selectedForum = 'all',
+  onSelectForum,
+  activeTabFilter = 'all',
+  onTabFilterChange,
 }) {
-  const [activeTab, setActiveTab] = useState('all');
-  const [selectedForum, setSelectedForum] = useState('all');
+  const [internalTab, setInternalTab] = useState('all');
+  const activeTab = activeTabFilter !== 'all' ? activeTabFilter : internalTab;
+
   const [tableFilter, setTableFilter] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState('10');
+  const [rowsPerPage, setRowsPerPage] = useState('6');
   const [currentPage, setCurrentPage] = useState(1);
 
   // Tab filtering
@@ -43,6 +50,29 @@ export function CourtRegistrySection({
     );
   });
 
+  // Reset page when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, selectedForum, tableFilter, rowsPerPage]);
+
+  // Real Pagination
+  const pageSize = Number(rowsPerPage);
+  const totalPages = Math.max(1, Math.ceil(finalDossiers.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * pageSize;
+  const paginatedDossiers = finalDossiers.slice(startIndex, startIndex + pageSize);
+
+  // Category counts
+  const countAll = dossiers.length;
+  const countHearing = dossiers.filter((d) => d.tabCategory === 'hearing').length;
+  const countReserved = dossiers.filter((d) => d.tabCategory === 'reserved').length;
+  const countCertified = dossiers.filter((d) => d.tabCategory === 'certified').length;
+
+  const handleTabClick = (tab) => {
+    setInternalTab(tab);
+    if (onTabFilterChange) onTabFilterChange(tab);
+  };
+
   return (
     <div className="space-y-4">
       {/* Controls & Section Header */}
@@ -56,7 +86,7 @@ export function CourtRegistrySection({
               </h3>
             </div>
             <p className="text-xs text-on-surface-variant mt-0.5 font-body">
-              High Court & Supreme Court Bench tracking with verified registry certifications
+              Supreme Court & High Court Bench tracking with verified DigiSeal registry certifications
             </p>
           </div>
 
@@ -64,17 +94,17 @@ export function CourtRegistrySection({
           <div className="flex items-center gap-2">
             <button
               onClick={onBatchCheck}
-              className="px-3 py-1.5 rounded bg-surface hover:bg-surface-container border border-outline-variant text-xs font-semibold text-on-surface flex items-center gap-1.5 shadow-2xs transition active:scale-95"
+              className="px-3 py-1.5 rounded bg-surface hover:bg-surface-container border border-outline-variant text-xs font-semibold text-on-surface flex items-center gap-1.5 shadow-2xs transition active:scale-95 cursor-pointer"
             >
-              <span className="material-symbols-outlined text-[16px] text-slate-600">file_upload</span>
+              <span className="material-symbols-outlined text-[16px] text-slate-600">sync</span>
               Batch CNR Check
             </button>
             <button
               onClick={onExportSheet}
-              className="px-3 py-1.5 rounded bg-primary text-white hover:bg-primary-container text-xs font-semibold flex items-center gap-1.5 shadow-xs transition active:scale-95"
+              className="px-3 py-1.5 rounded bg-primary text-white hover:bg-primary-container text-xs font-semibold flex items-center gap-1.5 shadow-xs transition active:scale-95 cursor-pointer"
             >
               <span className="material-symbols-outlined text-[16px] text-secondary">download</span>
-              Export Docket Sheet
+              Export Docket Sheet (.CSV)
             </button>
           </div>
         </div>
@@ -83,18 +113,18 @@ export function CourtRegistrySection({
         <div className="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center space-x-1 sm:space-x-2 text-xs font-label overflow-x-auto custom-scroll pb-1">
             <button
-              onClick={() => setActiveTab('all')}
-              className={`px-3 py-1.5 transition ${
+              onClick={() => handleTabClick('all')}
+              className={`px-3 py-1.5 transition cursor-pointer ${
                 activeTab === 'all'
                   ? 'font-semibold text-primary border-b-2 border-secondary bg-secondary-container/40 rounded-t'
                   : 'text-on-surface-variant hover:text-primary font-medium'
               }`}
             >
-              All Tracked Cases (1,248)
+              All Tracked Cases ({countAll})
             </button>
             <button
-              onClick={() => setActiveTab('hearing')}
-              className={`px-3 py-1.5 transition ${
+              onClick={() => handleTabClick('hearing')}
+              className={`px-3 py-1.5 transition cursor-pointer ${
                 activeTab === 'hearing'
                   ? 'font-semibold text-primary border-b-2 border-secondary bg-secondary-container/40 rounded-t'
                   : 'text-on-surface-variant hover:text-primary font-medium'
@@ -102,12 +132,12 @@ export function CourtRegistrySection({
             >
               Listed for Hearing{' '}
               <span className="bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded-full text-[10px] ml-1 font-semibold">
-                12
+                {countHearing}
               </span>
             </button>
             <button
-              onClick={() => setActiveTab('reserved')}
-              className={`px-3 py-1.5 transition ${
+              onClick={() => handleTabClick('reserved')}
+              className={`px-3 py-1.5 transition cursor-pointer ${
                 activeTab === 'reserved'
                   ? 'font-semibold text-primary border-b-2 border-secondary bg-secondary-container/40 rounded-t'
                   : 'text-on-surface-variant hover:text-primary font-medium'
@@ -115,12 +145,12 @@ export function CourtRegistrySection({
             >
               Orders Reserved{' '}
               <span className="bg-slate-100 text-slate-700 px-1.5 py-0.2 rounded-full text-[10px] ml-1 font-semibold">
-                5
+                {countReserved}
               </span>
             </button>
             <button
-              onClick={() => setActiveTab('certified')}
-              className={`px-3 py-1.5 transition ${
+              onClick={() => handleTabClick('certified')}
+              className={`px-3 py-1.5 transition cursor-pointer ${
                 activeTab === 'certified'
                   ? 'font-semibold text-primary border-b-2 border-secondary bg-secondary-container/40 rounded-t'
                   : 'text-on-surface-variant hover:text-primary font-medium'
@@ -128,7 +158,7 @@ export function CourtRegistrySection({
             >
               Certified Copy Dispatched{' '}
               <span className="bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded-full text-[10px] ml-1 font-semibold">
-                48
+                {countCertified}
               </span>
             </button>
           </div>
@@ -136,8 +166,8 @@ export function CourtRegistrySection({
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <select
               value={selectedForum}
-              onChange={(e) => setSelectedForum(e.target.value)}
-              className="text-xs bg-surface-container-low border border-outline-variant rounded px-2.5 py-1 text-on-surface font-medium focus:outline-none focus:border-secondary"
+              onChange={(e) => onSelectForum && onSelectForum(e.target.value)}
+              className="text-xs bg-surface-container-low border border-outline-variant rounded px-2.5 py-1 text-on-surface font-medium focus:outline-none focus:border-secondary cursor-pointer"
             >
               <option value="all">All Benches & Tribunals</option>
               <option value="supreme">Supreme Court of India</option>
@@ -151,7 +181,7 @@ export function CourtRegistrySection({
                 type="text"
                 value={tableFilter}
                 onChange={(e) => setTableFilter(e.target.value)}
-                placeholder="Filter rows..."
+                placeholder="Filter current view..."
                 className="w-full text-xs pl-7 pr-2 py-1 rounded border border-outline-variant bg-surface focus:outline-none focus:border-secondary font-body"
               />
               <span className="material-symbols-outlined absolute left-2 top-1.5 text-[14px] text-slate-400">
@@ -164,78 +194,68 @@ export function CourtRegistrySection({
 
       {/* MODULAR CASE DOSSIER CARDS (Multi-Column Structured Grid) */}
       <ModularDossierCards
-        dossiers={finalDossiers}
+        dossiers={paginatedDossiers}
         onSelectDossier={onSelectDossier}
         onDownloadPdf={onDownloadPdf}
         onRequestSeal={onRequestSeal}
+        onAskAi={onAskAi}
       />
 
-      {/* Pagination & Institutional Footer Summary */}
+      {/* Pagination & Summary Footer */}
       <div className="px-4 py-3 bg-white rounded-lg border border-outline-variant shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-on-surface-variant font-label">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="inline-flex items-center gap-1 font-semibold text-primary">
             <span className="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
-            Showing 1–{finalDossiers.length} of 1,248 Verified Dockets
+            Showing {finalDossiers.length === 0 ? 0 : startIndex + 1}–
+            {Math.min(startIndex + pageSize, finalDossiers.length)} of {finalDossiers.length} Filtered Dockets
           </span>
           <span className="text-slate-300">|</span>
           <span className="text-[11px] text-slate-500 font-mono">Registry Hash: 0x9f8c...3e1a</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500">Rows per bench:</span>
+          <span className="text-xs text-slate-500">Rows per page:</span>
           <select
             value={rowsPerPage}
             onChange={(e) => setRowsPerPage(e.target.value)}
-            className="bg-surface border border-outline-variant rounded px-2 py-0.5 text-xs text-on-surface"
+            className="bg-surface border border-outline-variant rounded px-2 py-0.5 text-xs text-on-surface cursor-pointer"
           >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
+            <option value="3">3</option>
+            <option value="6">6</option>
+            <option value="12">12</option>
+            <option value="24">24</option>
           </select>
 
+          {/* Dynamic Page Buttons */}
           <div className="flex items-center ml-2 border border-outline-variant rounded overflow-hidden">
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              className="px-2 py-1 bg-surface hover:bg-slate-100 border-r border-outline-variant disabled:opacity-40"
+              disabled={safeCurrentPage === 1}
+              className="px-2 py-1 bg-surface hover:bg-slate-100 border-r border-outline-variant disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+              title="Previous Page"
             >
               <span className="material-symbols-outlined text-[15px]">chevron_left</span>
             </button>
+
+            {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+              <button
+                key={pageNum}
+                onClick={() => setCurrentPage(pageNum)}
+                className={`px-2.5 py-1 text-xs font-semibold cursor-pointer ${
+                  safeCurrentPage === pageNum
+                    ? 'bg-primary text-white'
+                    : 'bg-surface hover:bg-slate-100 text-on-surface'
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
+
             <button
-              onClick={() => setCurrentPage(1)}
-              className={`px-2.5 py-1 text-xs font-semibold ${
-                currentPage === 1 ? 'bg-primary text-white' : 'bg-surface hover:bg-slate-100 text-on-surface'
-              }`}
-            >
-              1
-            </button>
-            <button
-              onClick={() => setCurrentPage(2)}
-              className={`px-2.5 py-1 text-xs font-medium ${
-                currentPage === 2 ? 'bg-primary text-white' : 'bg-surface hover:bg-slate-100 text-on-surface'
-              }`}
-            >
-              2
-            </button>
-            <button
-              onClick={() => setCurrentPage(3)}
-              className={`px-2.5 py-1 text-xs font-medium ${
-                currentPage === 3 ? 'bg-primary text-white' : 'bg-surface hover:bg-slate-100 text-on-surface'
-              }`}
-            >
-              3
-            </button>
-            <span className="px-2 py-1 bg-surface text-slate-400 text-xs">...</span>
-            <button
-              onClick={() => setCurrentPage(125)}
-              className="px-2.5 py-1 bg-surface hover:bg-slate-100 text-on-surface text-xs font-medium"
-            >
-              125
-            </button>
-            <button
-              onClick={() => setCurrentPage((p) => p + 1)}
-              className="px-2.5 py-1 bg-surface hover:bg-slate-100 border-l border-outline-variant"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={safeCurrentPage === totalPages}
+              className="px-2 py-1 bg-surface hover:bg-slate-100 border-l border-outline-variant disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+              title="Next Page"
             >
               <span className="material-symbols-outlined text-[15px]">chevron_right</span>
             </button>
@@ -257,10 +277,10 @@ export function CourtRegistrySection({
           </div>
         </div>
         <button
-          onClick={() => alert('Opening Supreme Court Gazette Notification No. SC/ROSTER/2025/44B')}
-          className="shrink-0 px-2.5 py-1 rounded text-primary hover:text-secondary font-semibold border border-outline-variant hover:border-secondary flex items-center gap-1 transition"
+          onClick={onOpenGazette}
+          className="shrink-0 px-2.5 py-1 rounded text-primary hover:text-secondary font-semibold border border-outline-variant hover:border-secondary flex items-center gap-1 transition cursor-pointer"
         >
-          View Official Notification
+          View Official Gazette Notification
           <span className="material-symbols-outlined text-[14px]">open_in_new</span>
         </button>
       </div>

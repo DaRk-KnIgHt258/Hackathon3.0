@@ -9,11 +9,6 @@ import {
   FileText,
   Highlighter,
   Sparkles,
-  ExternalLink,
-  BookOpen,
-  Printer,
-  Eye,
-  Check,
   Hash
 } from 'lucide-react';
 

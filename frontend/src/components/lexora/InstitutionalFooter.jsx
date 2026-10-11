@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function InstitutionalFooter() {
+export function InstitutionalFooter({ onOpenInstitutional }) {
   return (
     <footer className="bg-primary text-white border-t border-slate-800 mt-auto py-5 px-4 sm:px-6">
       <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-label text-slate-400">
@@ -15,18 +15,30 @@ export function InstitutionalFooter() {
           </span>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-5">
-          <a className="hover:text-secondary transition" href="#bar-council">
+          <button
+            onClick={() => onOpenInstitutional && onOpenInstitutional('bar-council')}
+            className="hover:text-secondary transition cursor-pointer"
+          >
             Bar Council Security Standards
-          </a>
-          <a className="hover:text-secondary transition" href="#api-gateway">
+          </button>
+          <button
+            onClick={() => onOpenInstitutional && onOpenInstitutional('api-gateway')}
+            className="hover:text-secondary transition cursor-pointer"
+          >
             Registry API Gateway
-          </a>
-          <a className="hover:text-secondary transition" href="#digiseal">
+          </button>
+          <button
+            onClick={() => onOpenInstitutional && onOpenInstitutional('digiseal')}
+            className="hover:text-secondary transition cursor-pointer"
+          >
             DigiSeal Compliance
-          </a>
-          <a className="hover:text-secondary transition" href="#registry-settings">
+          </button>
+          <button
+            onClick={() => onOpenInstitutional && onOpenInstitutional('registry-settings')}
+            className="hover:text-secondary transition cursor-pointer"
+          >
             Court Registry Settings
-          </a>
+          </button>
           <span className="text-slate-400 font-mono text-[11px] bg-slate-900/60 px-2 py-0.5 rounded border border-slate-700/60 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
             All 25 High Courts Operational

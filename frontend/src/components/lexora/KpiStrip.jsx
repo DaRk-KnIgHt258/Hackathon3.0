@@ -1,10 +1,14 @@
 import React from 'react';
 
-export function KpiStrip({ totalCases = 1248 }) {
+export function KpiStrip({ totalCases = 1248, onKpiClick }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {/* Card 1: Active Tracked Dockets */}
-      <div className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/40 transition-all flex flex-col justify-between relative overflow-hidden group">
+      <div
+        onClick={() => onKpiClick && onKpiClick('all')}
+        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+        title="View All Active Matters"
+      >
         <div className="absolute -right-3 -top-3 w-16 h-16 bg-primary/5 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
         <div>
           <div className="flex items-center justify-between text-xs mb-2">
@@ -32,7 +36,11 @@ export function KpiStrip({ totalCases = 1248 }) {
       </div>
 
       {/* Card 2: Certified Judgments */}
-      <div className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/40 transition-all flex flex-col justify-between relative overflow-hidden group">
+      <div
+        onClick={() => onKpiClick && onKpiClick('certified')}
+        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+        title="Filter Certified Copies"
+      >
         <div className="absolute -right-3 -top-3 w-16 h-16 bg-secondary/10 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
         <div>
           <div className="flex items-center justify-between text-xs mb-2">
@@ -58,7 +66,11 @@ export function KpiStrip({ totalCases = 1248 }) {
       </div>
 
       {/* Card 3: Pending Legal Notices */}
-      <div className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/40 transition-all flex flex-col justify-between relative overflow-hidden group">
+      <div
+        onClick={() => onKpiClick && onKpiClick('notices')}
+        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+        title="View Statutory Limitation Radar"
+      >
         <div className="absolute -right-3 -top-3 w-16 h-16 bg-amber-500/5 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
         <div>
           <div className="flex items-center justify-between text-xs mb-2">
@@ -84,7 +96,11 @@ export function KpiStrip({ totalCases = 1248 }) {
       </div>
 
       {/* Card 4: Available PDF Downloads */}
-      <div className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/40 transition-all flex flex-col justify-between relative overflow-hidden group">
+      <div
+        onClick={() => onKpiClick && onKpiClick('vault')}
+        className="bg-surface rounded-lg p-4 border border-outline-variant shadow-sm hover:border-secondary/60 hover:shadow-md transition-all flex flex-col justify-between relative overflow-hidden group cursor-pointer"
+        title="View Priority Certified Vault"
+      >
         <div className="absolute -right-3 -top-3 w-16 h-16 bg-primary-container/10 rounded-full pointer-events-none group-hover:scale-110 transition-transform"></div>
         <div>
           <div className="flex items-center justify-between text-xs mb-2">
